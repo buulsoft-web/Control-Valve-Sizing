@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="nl"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Globe valve krachten</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6f7f9;--card:#fff;--tx:#1b1f24;--mu:#667;--bd:#d5d9df;--hi:#d9382e;--lo:#2a6fd6;--mid:#9aa0a8;--lg:#d3d6db;--pos:#2e9b57;--neg:#d9822e;--hi4:color-mix(in srgb,var(--hi) 40%,var(--card));--lo4:color-mix(in srgb,var(--lo) 40%,var(--card))}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171b;--card:#1d2127;--tx:#e8eaed;--mu:#9aa0a8;--bd:#3a4048;--hi:#ff6b5e;--lo:#6aa3ff;--mid:#6b7078;--lg:#4b5059}}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--tx);font:12px system-ui,sans-serif;padding:4px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;overflow:hidden}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:4px}
+.in{display:flex;flex-direction:column;gap:3px}
+.in .r:first-child{grid-template-columns:1fr}
+.sr.p{grid-template-columns:20px 1fr 90px}
+.dual{position:relative;height:40px;margin:0 22px;touch-action:none;cursor:pointer}
+.dual::before{content:'';position:absolute;left:0;right:0;top:50%;height:6px;margin-top:-3px;border-radius:3px;background:var(--lg)}
+.dual .seg{position:absolute;top:50%;height:6px;margin-top:-3px;background:var(--mid)}
+.dual .th{position:absolute;top:50%;width:44px;height:32px;transform:translate(-50%,-50%);border-radius:16px;color:#fff;font:600 13px system-ui,sans-serif;display:flex;align-items:center;justify-content:center;pointer-events:none}
+#thin{background:var(--hi)}#thout{background:var(--lo)}#sth{background:var(--neg)}
+.sr{display:grid;grid-template-columns:44px 1fr 70px;align-items:center;gap:6px;font-size:11px;color:var(--mu);white-space:nowrap}
+.sr input[type=range]{width:100%;margin:0}
+.sr>span:last-of-type{text-align:right}
+input[type=range]{height:32px}
+#grab{height:24px;display:flex;justify-content:center;align-items:center;gap:8px;font-size:11px;color:var(--mu);touch-action:none;cursor:pointer;margin:-2px 0}
+#grab i{width:48px;height:5px;border-radius:3px;background:var(--mu);opacity:.5}
+.in.col{display:none}
+.btns{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:4px}
+.btns button{font-size:11px;padding:8px 2px;min-height:38px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
+.sym{position:relative;height:32px;border-radius:16px;background:var(--lg);border:1px solid var(--bd);touch-action:none;cursor:ew-resize}
+.sym .bar{position:absolute;left:50%;top:0;height:100%;transform:translateX(-50%);border-radius:16px}
+.sym .h::before,.sym .h::after{content:'';position:absolute;top:4px;bottom:4px;width:4px;border-radius:2px;background:var(--card)}
+.sym .h::before{left:4px}.sym .h::after{right:4px}
+.r{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.f{display:flex;align-items:center;gap:3px;color:var(--mu);font-size:11px;white-space:nowrap;min-width:0}
+.f input,.f select{flex:1;min-width:0;width:100%;font:inherit;font-size:14px;padding:6px 4px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--tx)}
+.f input[type=range]{padding:0}
+.mid{flex:1;min-height:0;display:flex;gap:4px}
+.sk{flex:1.2;min-width:0;display:flex;gap:4px}
+.sk svg{flex:1;min-width:0}
+.tg{display:flex;flex-direction:column;justify-content:center;gap:5px;width:62px;font-size:11px;color:var(--mu)}
+.tg b{font-weight:600;margin-top:4px}
+.sw{display:flex;flex-direction:column;padding:2px;gap:2px;border:1px solid var(--bd);border-radius:12px;background:var(--bg)}
+.sw span{display:none;padding:11px 0;border-radius:10px;font-size:14px}
+.sw span.on{display:block;background:var(--tx);color:var(--bg);font-weight:600}
+.cc{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.cc .card{flex:1;min-height:0;position:relative;display:flex;flex-direction:column;padding:1px}
+.lb{position:absolute;left:5px;top:3px;z-index:1;font-style:normal;font-size:11px;color:var(--mu)}
+svg{width:100%;height:100%;min-height:0;display:block}
+.ch{position:relative;height:30%;min-height:110px;padding:0;overflow:hidden}
+body.fold .ch{height:52%}
+#dir{position:absolute;top:3px;right:4px;font-size:11px;padding:2px 6px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--tx)}
+</style></head><body>
+
+<div class="card in">
+<div class="r">
+<div class="sr"><span>Plug</span><input id="plug" type="range" min="10" max="200" step="1" value="50"><span id="plugv"></span></div>
+<div class="sr"><span>Stem</span><div class="sym" id="stemT"><div class="bar"></div><div class="bar h"></div></div><span id="stemv"></span><input id="stem" type="hidden" value="25"></div>
+<div class="sr"><span>Seat</span><div class="sym" id="seatT"><div class="bar h"></div><div class="bar"></div></div><span id="seatv"></span><input id="seat" type="hidden" value="90"></div>
+</div>
+<div class="r">
+
+
+<label class="f" style="grid-column:1/-1">Pos <span id="posv">0%</span><input id="pos" type="range" min="0" max="0" value="0" disabled></label>
+</div>
+<div class="r">
+
+<label class="f">Frict <span id="fricv"></span><input id="fric" type="range" min="0" max="5" step="0.1" value="1"></label>
+
+</div>
+</div>
+<div id="grab"><i></i><span id="gt">▲ Swipe up</span></div>
+<div class="card" id="pc">
+<div class="sr p"><span>Fs</span><div class="dual" id="sT"><div class="th" id="sth"></div></div><label class="f">MAST<input id="mast" type="number" value="300"></label><input id="spring" type="hidden" value="5"></div>
+<div class="sr p"><span>P</span><div class="dual" id="pT"><div class="seg"></div><div class="th" id="thin"></div><div class="th" id="thout"></div></div><label class="f">Max<input id="pmax" type="number" value="135" step="1" inputmode="numeric"></label><input id="pin" type="hidden" value="75"><input id="pout" type="hidden" value="70"></div>
+<div class="btns"><button data-c="op" id="bop"></button><button data-c="maxin">Max in</button><button data-c="maxout">Max uit</button><button data-c="z0">0 dP @0</button><button data-c="zm">0 dP @Max</button></div>
+</div>
+
+<div class="mid">
+<div class="card sk"><input id="flow" type="hidden" value="over"><input id="fail" type="hidden" value="close"><svg id="sketch" viewBox="-70 0 270 256"></svg></div>
+<div class="cc">
+<div class="card"><i class="lb">Top view</i><svg id="top" viewBox="4 4 192 192"></svg></div>
+<div class="card"><i class="lb">Bottom view</i><svg id="bot" viewBox="4 4 192 192"></svg></div>
+</div>
+</div>
+
+<div class="card ch"><button id="dir"></button><svg id="chart"></svg></div>
+
+<script>
+const $=id=>document.getElementById(id), N=id=>parseFloat($(id).value)||0;
+const NS='http://www.w3.org/2000/svg';
+function el(p,t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;p.appendChild(e);return e}
+
+function dia(){ // seat en stem = % van plug
+  const p=N('plug'),s=p*N('seat')/100,t=p*N('stem')/100;
+  // spring max = 2x worst case sluitkracht: Pmax·A_stem + (Pmax-Pout)·A_seat + friction (flow Under)
+  const need=(N('pmax')*Math.PI/4*t*t+Math.abs(N('pmax')-N('pout'))*Math.PI/4*s*s)*1e-4+N('fric');
+  $('spring').max=Math.max(Math.ceil(2*need*10)/10,0.1);
+  const smax=parseFloat($('spring').max);if(N('spring')>smax)$('spring').value=smax;
+  const sw_=sfrozen||{c:N('spring'),m:smax};$('sth').style.left=gS(N('spring'),sw_)*100+'%';$('sth').textContent=N('spring').toFixed(1);
+  const pm=Math.max(Math.round(N('pmax')),1);['pin','pout'].forEach(k=>{if(N(k)>pm)$(k).value=pm});
+  const pi=N('pin'),po=N('pout'),lo=Math.min(pi,po),hi=Math.max(pi,po),sg=$('pT').firstElementChild;
+  const w=frozen||win();$('thin').style.left=g(pi,w)*100+'%';$('thout').style.left=g(po,w)*100+'%';$('thin').textContent=pi;$('thout').textContent=po;
+  sg.style.left=g(lo,w)*100+'%';sg.style.width=(g(hi,w)-g(lo,w))*100+'%';
+  $('plugv').textContent=p+'mm';$('seatv').textContent=N('seat')+'% '+s.toFixed(0)+'mm';$('stemv').textContent=N('stem')+'% '+t.toFixed(0)+'mm';
+  const un=$('flow').value==='under',pu=un?'var(--hi)':'var(--lo)',pu4=un?'var(--hi4)':'var(--lo4)',po4=un?'var(--lo4)':'var(--hi4)';
+  const bar=(id,i,w,col)=>{const b=$(id+'T').children[i];b.style.width=w+'%';b.style.background=col};
+  bar('stem',0,N('seat'),po4);bar('stem',1,N('stem'),'#000'); // top view
+  bar('seat',0,N('seat'),pu4);bar('seat',1,N('stem'),pu); // bottom view
+  $('fricv').textContent=N('fric').toFixed(1)+'kN';
+  return {p,s,t};
+}
+function calc(){
+  const d=dia(),As=Math.PI/4*d.s**2, Ast=Math.PI/4*d.t**2;
+  const pin=N('pin'), pout=N('pout'); // P[MaxShutOff] telt niet mee in de krachten
+  const under=$('flow').value==='under';
+  const pU=under?pin:pout, pO=under?pout:pin, dP=Math.abs(pin-pout), k=0.1/1000;
+  return {pU,pO,dP,under,F:{
+    spring:($('fail').value==='open'?1:-1)*N('spring'), // + = openen
+    stem:pU*Ast*k,
+    seat:(under?1:-1)*dP*As*k}};
+}
+
+function arrow(s,x1,y1,x2,y2,col,sw=2.5,L=8,W=4){
+  el(s,'line',{x1,y1,x2,y2,stroke:col,'stroke-width':sw});
+  const a=Math.atan2(y2-y1,x2-x1),bx=x2-L*Math.cos(a),by=y2-L*Math.sin(a);
+  el(s,'polygon',{points:`${x2},${y2} ${bx-W*Math.sin(a)},${by+W*Math.cos(a)} ${bx+W*Math.sin(a)},${by-W*Math.cos(a)}`,fill:col});
+}
+
+function sketch(c){
+  const s=$('sketch');s.innerHTML='';
+  const pu=c.under?'var(--hi)':'var(--lo)', po=c.under?'var(--lo)':'var(--hi)', ln={stroke:'var(--tx)','stroke-width':1.6,fill:'none'};
+  // drukzones
+  el(s,'path',{d:'M30 200 H88 V200 H112 V238 H22 V200 Z',fill:pu,opacity:.4});
+  el(s,'path',{d:'M30 168 H170 V200 H178 V238 H112 V200 H30 Z',fill:po,opacity:.4});
+  // lichaam
+  el(s,'path',{d:'M22 200 H30 V168 H70 M130 168 H170 V200 H178 M22 238 H178 M30 200 H88 M112 200 V238',...ln});
+  el(s,'rect',{x:10,y:192,width:12,height:54,fill:'var(--card)',stroke:'var(--tx)'});
+  el(s,'rect',{x:178,y:192,width:12,height:54,fill:'var(--card)',stroke:'var(--tx)'});
+  // zitring + plug (gesloten)
+  el(s,'rect',{x:84,y:198,width:4,height:7,fill:'var(--mid)',stroke:'var(--tx)'});
+  el(s,'rect',{x:112,y:198,width:4,height:7,fill:'var(--mid)',stroke:'var(--tx)'});
+  el(s,'path',{d:'M86 188 H114 L112 198 H88 Z',fill:'var(--mid)',stroke:'var(--tx)'});
+  // bonnet, stem, yoke, actuator
+  el(s,'rect',{x:68,y:162,width:64,height:8,fill:'var(--card)',stroke:'var(--tx)'});
+  el(s,'rect',{x:82,y:122,width:36,height:40,fill:'var(--card)',stroke:'var(--tx)'});
+  el(s,'rect',{x:88,y:112,width:24,height:10,fill:'var(--mid)',stroke:'var(--tx)'});
+  el(s,'path',{d:'M74 162 V72 M126 162 V72',...ln});
+  el(s,'rect',{x:97,y:46,width:6,height:142,fill:'var(--mid)',stroke:'var(--tx)'});
+  el(s,'rect',{x:55,y:20,width:90,height:52,rx:8,fill:'var(--card)',stroke:'var(--tx)','stroke-width':1.6});
+  el(s,'path',{d:'M57 46 Q100 40 143 46',...ln});
+  // veer in actuator: Fail Close = bovenkamer, Fail Open = onderkamer
+  const fo=$('fail').value==='open',y0=fo?49:23,y1=fo?70:41;
+  let sp='M100 '+y0;for(let i=1;i<=6;i++)sp+=' L'+(i%2?80:120)+' '+(y0+(y1-y0)*i/7);sp+=' L100 '+y1;
+  el(s,'path',{d:sp,fill:'none',stroke:'var(--neg)','stroke-width':1.8});
+  if(fo)el(s,'rect',{x:97,y:44,width:6,height:28,fill:'var(--mid)',stroke:'var(--tx)'});
+  // veerkracht-pijl (+ = omhoog = open)
+  const open=$('fail').value==='open';
+  arrow(s,160,open?110:50,160,open?50:110,'var(--neg)');
+  el(s,'text',{x:160,y:122,'text-anchor':'middle','font-size':9,fill:'var(--tx)'},'Spring');
+  el(s,'text',{x:160,y:132,'text-anchor':'middle','font-size':9,fill:'var(--mu)'},'Fail '+(open?'Open':'Close'));
+  // flowpijlen en labels
+  const r=c.under;
+  if(r){arrow(s,1,219,18,219,'var(--tx)');arrow(s,182,219,199,219,'var(--tx)')}
+  else{arrow(s,199,219,182,219,'var(--tx)');arrow(s,18,219,1,219,'var(--tx)')}
+  el(s,'text',{x:16,y:254,'text-anchor':'middle','font-size':9,fill:'var(--mu)'},r?'IN':'OUT');
+  el(s,'text',{x:184,y:254,'text-anchor':'middle','font-size':9,fill:'var(--mu)'},r?'OUT':'IN');
+  el(s,'text',{x:100,y:254,'text-anchor':'middle','font-size':9,fill:'var(--tx)'},'Flow '+(r?'Under':'Over'));
+  el(s,'text',{x:34,y:228,'font-size':8,fill:'var(--tx)'},'P under '+c.pU);
+  el(s,'text',{x:118,y:186,'font-size':8,fill:'var(--tx)'},'P over '+c.pO);
+  // toggles in de tekening: Fail naast de actuator, Flow bij de body (tik = wisselen)
+  const tg=(x,y,w,h,lab,id,a,b)=>{const v=$(id).value===a?a:b,g=el(s,'g',{style:'cursor:pointer'});
+    el(g,'text',{x:x+w/2,y:y-4,'text-anchor':'middle','font-size':10,fill:'var(--mu)'},lab);
+    el(g,'rect',{x,y,width:w,height:h,rx:10,fill:'var(--tx)'});
+    el(g,'text',{x:x+w/2,y:y+h/2+6,'text-anchor':'middle','font-size':17,'font-weight':700,fill:'var(--bg)'},v[0].toUpperCase()+v.slice(1));
+    g.addEventListener('click',()=>{$(id).value=$(id).value===a?b:a;update()})};
+  tg(-68,20,64,52,'Fail','fail','open','close');tg(-68,168,64,70,'Flow','flow','over','under');
+}
+
+function circles(c){
+  const d=dia(),dP=d.p,dS=d.s,dT=d.t,sc=190/Math.max(dP,1);
+  const pu=c.under?'var(--hi)':'var(--lo)', pu4=c.under?'var(--hi4)':'var(--lo4)', po4=c.under?'var(--lo4)':'var(--hi4)';
+  const t=$('top'),b=$('bot');t.innerHTML='';b.innerHTML='';
+  el(t,'circle',{cx:100,cy:100,r:dP/2*sc,fill:'var(--lg)',stroke:'var(--tx)'});
+  el(t,'circle',{cx:100,cy:100,r:dS/2*sc,fill:po4,stroke:'var(--tx)'});
+  el(t,'circle',{cx:100,cy:100,r:dT/2*sc,fill:'#000',stroke:'var(--tx)'});
+  el(b,'circle',{cx:100,cy:100,r:dP/2*sc,fill:'var(--lg)',stroke:'var(--tx)'});
+  el(b,'circle',{cx:100,cy:100,r:dS/2*sc,fill:pu4,stroke:'var(--tx)'});
+  el(b,'circle',{cx:100,cy:100,r:dT/2*sc,fill:pu,stroke:'var(--tx)'});
+}
+
+let flip=false,lastFail='';
+function chart(c){
+  const s=$('chart'),W=s.clientWidth||380,H=s.clientHeight||200;
+  s.innerHTML='';s.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const f=c.F,fr=N('fric');
+  const sd=$('fail').value==='open'?1:-1;
+  if(lastFail!==$('fail').value){flip=false;lastFail=$('fail').value}
+  const dir=flip?-sd:sd;$('dir').textContent='\u21c4 '+(dir>0?'Sluiten':'Openen');
+  const steps=[['Spring',f.spring],['Frict',-dir*fr],['P\u00b7Stem',f.stem],['dP\u00b7Seat',f.seat]];
+  let cum=0;const bars=steps.map(([n,v])=>{const a=cum;cum+=v;return {n,v,a,b:cum}});
+  bars.push({n:'Net',v:cum,a:0,b:cum,net:true});
+  const sp=f.spring,sfv=sp?cum/sp:-1; // lijnen op % van springkracht, zelfde richting als de veer
+  const lines=[[.5,'#2e9b57'],[.3,'#e6b800'],[.1,'#f08a1c']];
+  const nc=sfv>=.5?lines[0][1]:sfv>=.3?lines[1][1]:sfv>=.1?lines[2][1]:'#d9382e';
+  const lv=bars.flatMap(b=>[b.a,b.b]).concat(0),hi=Math.max(...lv),lo=Math.min(...lv),rng=(hi-lo)||1;
+  const top=34,bot=H-20,y=v=>top+(hi-v)/rng*(bot-top);
+  const m=6,slot=(W-2*m)/bars.length,bw=slot*0.7;
+  el(s,'text',{x:m,y:14,'font-size':12,'font-weight':600,fill:'var(--tx)'},(dir>0?'Openen':'Sluiten')+(dir===sd?' (veerrichting)':'')+' \u00b7 kN');
+  el(s,'text',{x:190,y:16,'text-anchor':'start','font-size':16,'font-weight':700,fill:'var(--tx)'},'SFact '+(f.spring?(cum/f.spring).toFixed(2):'\u221e'));
+  el(s,'line',{x1:m,x2:W-m,y1:y(0),y2:y(0),stroke:'var(--mu)'});
+  bars.forEach((b,i)=>{
+    const x=m+i*slot+(slot-bw)/2,yt=y(Math.max(b.a,b.b)),ht=Math.max(Math.abs(y(b.a)-y(b.b)),1);
+    el(s,'rect',{x,y:yt,width:bw,height:ht,fill:b.net?nc:(b.v>=0?'var(--pos)':'var(--neg)'),opacity:b.net?.75:.9});
+    if(Math.abs(b.v)>1e-9){const len=Math.abs(y(b.b)-y(b.a));arrow(s,x+bw/2,y(b.a),x+bw/2,y(b.b),'#000',1.2,Math.min(6,len*0.6),Math.min(3,len*0.3))}
+    el(s,'text',{x:x+bw/2,y:yt-4,'text-anchor':'middle','font-size':11,fill:'var(--tx)'},b.v.toFixed(2));
+    el(s,'text',{x:x+bw/2,y:H-5,'text-anchor':'middle','font-size':11,fill:'var(--mu)'},b.n);
+    if(i<bars.length-1)el(s,'line',{x1:x+bw,x2:x+slot,y1:y(b.b),y2:y(b.b),stroke:'var(--mu)','stroke-dasharray':'2 2'});
+  });
+  if(sp)lines.forEach(([p,col])=>{const yy=y(sp*p);el(s,'line',{x1:m,x2:W-m,y1:yy,y2:yy,stroke:col,'stroke-width':1.5,'stroke-dasharray':'5 3'});el(s,'text',{x:W-m,y:yy-2,'text-anchor':'end','font-size':9,fill:col},Math.round(p*100)+'%')});
+}
+function update(){$('bop').textContent='Op '+op.i+'→'+op.o;const c=calc();sketch(c);circles(c);chart(c)}
+document.querySelectorAll('input,select').forEach(e=>e.addEventListener('input',update));
+$('dir').onclick=()=>{flip=!flip;update()};
+function sym(id,min,max){ // symmetrische slider: balkbreedte = % van plug (track = plug)
+  const inp=$(id),t=$(id+'T');
+  const set=e=>{const r=t.getBoundingClientRect(),w=Math.abs(e.clientX-(r.left+r.width/2))*2/r.width*100;inp.value=Math.round(Math.min(max,Math.max(min,w)));update()};
+  t.addEventListener('pointerdown',e=>{t.setPointerCapture(e.pointerId);set(e)});
+  t.addEventListener('pointermove',e=>{if(t.hasPointerCapture(e.pointerId))set(e)});
+}
+sym('stem',5,95);sym('seat',75,99);dual();
+function dual(){ // 1 slider met 2 handles: P in (rood) en P out (blauw), max = P max shut off
+  const t=$('pT');let act=null;
+  const val=e=>{const r=t.getBoundingClientRect(),w=frozen||win();return Math.round(Math.min(w.pm,Math.max(0,gi(Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),w))))};
+  const set=e=>{$(act).value=val(e);preset=false;update()};
+  t.addEventListener('pointerdown',e=>{frozen=win();const v=val(e),a=Math.abs(v-N('pin')),b=Math.abs(v-N('pout'));act=a<b?'pin':b<a?'pout':(v>N('pin')?'pin':'pout');t.setPointerCapture(e.pointerId);set(e)});
+  t.addEventListener('pointermove',e=>{if(t.hasPointerCapture(e.pointerId))set(e)});
+}
+let op={i:75,o:70},preset=false,frozen=null; // frozen = vaste schaal tijdens slepen
+// niet-lineaire druk-schaal: rond de duimen uitvergroot (70% van de track), rest samengedrukt
+function win(){const pm=Math.max(Math.round(N('pmax')),1),lo=Math.min(N('pin'),N('pout')),hi=Math.max(N('pin'),N('pout')),pad=Math.max(5,(hi-lo)*.25),a=Math.max(0,lo-pad),b=Math.min(pm,hi+pad);return{pm,a,b,sa:a>0?.15:0,sb:b<pm?.85:1}}
+function g(p,w){if(p<=w.a)return w.a>0?p/w.a*w.sa:0;if(p>=w.b)return w.b<w.pm?w.sb+(p-w.b)/(w.pm-w.b)*(1-w.sb):1;return w.sa+(p-w.a)/(w.b-w.a)*(w.sb-w.sa)}
+function gi(x,w){if(x<=w.sa)return w.sa>0?x/w.sa*w.a:0;if(x>=w.sb)return w.sb<1?w.b+(x-w.sb)/(1-w.sb)*(w.pm-w.b):w.pm;return w.a+(x-w.sa)/(w.sb-w.sa)*(w.b-w.a)}
+['pointerup','pointercancel'].forEach(ev=>$('pT').addEventListener(ev,()=>{frozen=null;update()}));
+// spring-slider: niet-lineair, gekozen waarde altijd in het midden (wortelschaal rond de waarde)
+let sfrozen=null;
+function gS(v,w){const D=v>=w.c?w.m-w.c:w.c;if(D<=0)return .5;const r=Math.sqrt(Math.abs(v-w.c)/D);return v>=w.c?.5+.5*r:.5-.5*r}
+function giS(x,w){const dx=x-.5,D=dx>=0?w.m-w.c:w.c,v=w.c+(dx>=0?1:-1)*D*(2*Math.abs(dx))**2;return Math.min(w.m,Math.max(0,v))}
+(function(){const t=$('sT');
+  const val=e=>{const r=t.getBoundingClientRect();return Math.round(giS(Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),sfrozen)*10)/10};
+  t.addEventListener('pointerdown',e=>{sfrozen={c:N('spring'),m:parseFloat($('spring').max)};t.setPointerCapture(e.pointerId);$('spring').value=val(e);update()});
+  t.addEventListener('pointermove',e=>{if(sfrozen&&t.hasPointerCapture(e.pointerId)){$('spring').value=val(e);update()}});
+  ['pointerup','pointercancel'].forEach(ev=>t.addEventListener(ev,()=>{sfrozen=null;update()}));
+})();
+const inc=document.querySelector('.in'),PM=()=>Math.max(Math.round(N('pmax')),0);
+function fold(c){if(c&&!preset)op={i:N('pin'),o:N('pout')};inc.classList.toggle('col',c);document.body.classList.toggle('fold',c);$('gt').textContent=c?'▼ Swipe down':'▲ Swipe up';update()}
+let ty=null;
+inc.addEventListener('touchstart',e=>{ty=e.target.closest('.sym,.dual,input,select')?null:e.touches[0].clientY},{passive:true});
+inc.addEventListener('touchend',e=>{if(ty!=null&&ty-e.changedTouches[0].clientY>40)fold(true);ty=null});
+const gb=$('grab');let gy=null;
+gb.addEventListener('touchstart',e=>{gy=e.touches[0].clientY},{passive:true});
+gb.addEventListener('touchend',e=>{const d=gy-e.changedTouches[0].clientY;if(d>25)fold(true);else if(d<-25)fold(false);gy=null});
+gb.addEventListener('click',()=>fold(!inc.classList.contains('col')));
+const PR={op:()=>[op.i,op.o],maxin:()=>[PM(),0],maxout:()=>[0,PM()],z0:()=>[0,0],zm:()=>[PM(),PM()]};
+document.querySelectorAll('.btns button').forEach(b=>b.onclick=()=>{const[i,o]=PR[b.dataset.c]();$('pin').value=i;$('pout').value=o;preset=true;update()});
+window.addEventListener('resize',update);
+
+update();
+</script></body></html>
