@@ -16,12 +16,15 @@ body{background:var(--bg);color:var(--tx);font:12px system-ui,sans-serif;padding
 .in .r:first-child{grid-template-columns:1fr}
 .sr.p{grid-template-columns:54px 1fr 110px}
 .sr>.f{justify-content:flex-end}
-.sr>.f input{flex:none;width:42px}
-.sr.q{grid-template-columns:2fr 1fr 110px;gap:4px;align-items:end}
+.sr>.f input{flex:none;width:50px}
+.sr.q{grid-template-columns:2fr 1fr 130px;gap:4px;align-items:end}
 .sr.q>span{padding-bottom:13px}
 .sr.q>label{margin-bottom:4px}
-.sr.p.r2{grid-template-columns:1fr 110px;gap:4px;align-items:end}
+.sr.p.r2{grid-template-columns:1fr 63px 63px;gap:4px;align-items:end}
 .sr.p.r2>label{margin-bottom:4px}
+.fc{display:flex;flex-direction:column;min-width:0}
+.fc small{font-size:8px;color:var(--mu);white-space:nowrap}
+.fc input{width:100%;min-width:0;box-sizing:border-box;font:inherit;font-size:14px;padding:6px 3px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--tx)}
 .q .dual{margin:0}
 #fth{background:var(--neg);width:38px}
 .fr{display:flex;flex-direction:column;min-width:0}
@@ -50,7 +53,7 @@ input[type=range]{height:32px}
 .f input[type=range]{padding:0}
 .mid{flex:1;min-height:0;display:flex;gap:4px}
 .sk{flex:1.2;min-width:0;display:flex;flex-direction:row;gap:2px}
-.pv{display:flex;flex-direction:column;align-items:center;width:34px;font-size:10px;color:var(--mu);padding:2px 0}
+.pv{display:flex;flex-direction:column;align-items:center;width:34px;font-size:10px;color:var(--mu);padding:2px 0;white-space:nowrap}
 .pv input[type=range]{writing-mode:vertical-lr;direction:rtl;flex:1;height:auto;width:24px;margin:4px 0;min-height:0}
 .sk svg{flex:1;min-width:0;min-height:0}
 .tg{display:flex;flex-direction:column;justify-content:center;gap:5px;width:62px;font-size:11px;color:var(--mu)}
@@ -70,16 +73,27 @@ svg{width:100%;height:100%;min-height:0;display:block}
 .b3{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
 .b3 button{font-size:12px;min-height:34px;padding:2px;line-height:1.15;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
 
-.v2{display:none;flex:1;min-height:0;flex-direction:column;gap:4px}
+.v2{display:none;flex:1;min-height:0;flex-direction:column;gap:4px;padding:2px}
 body.s2 .v2{display:flex}
 body.s2 .mid,body.s2 .ch,body.s2>.b3{display:none}
-#mc{position:absolute;left:30px;top:40px;z-index:2;background:var(--card);border:1px solid var(--bd);border-radius:6px;opacity:.94;touch-action:none;cursor:crosshair}
+#mc{position:absolute;left:6px;top:40px;z-index:2;background:var(--card);border:1px solid var(--bd);border-radius:6px;opacity:.94;touch-action:none;cursor:crosshair}
 .vt button{font-size:15px;min-height:58px}
 #tw{flex:1;min-height:0;position:relative}
 #mw{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--bd);border-radius:6px;opacity:.95}
 #tc{display:block;touch-action:none;cursor:crosshair}
 .tl{display:flex;gap:10px;font-size:11px;color:var(--mu);justify-content:center;flex-wrap:wrap}
 .tl i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+/* pc-indeling: invoer en waterfall links, klep + cirkels en xy-plot rechts; niet full width */
+body.wide{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:430px 1fr;grid-template-rows:auto auto auto auto 1fr;gap:6px;padding:8px;height:min(100vh,980px);border:1px solid var(--bd);border-radius:14px}
+body.wide .tb{grid-column:1/-1}
+body.wide .in{grid-column:1;grid-row:2}
+body.wide #pc{grid-column:1;grid-row:3}
+body.wide .b3{grid-column:1;grid-row:4;grid-template-columns:repeat(3,1fr)}
+body.wide .mid{grid-column:2;grid-row:2/5;min-height:0;contain:size}
+body.wide .ch{grid-column:1;grid-row:5;height:auto;min-height:0}
+body.wide .v2{grid-column:2;grid-row:5;display:flex;min-height:0}
+body.s2{padding-left:2px;padding-right:2px}
+body.wide .vt,body.wide #mc,body.wide #mw,body.wide .b3 button[data-k=trend]{display:none}
 </style></head><body>
 <div class="tb"><span>Globe valve Forces Visualized</span><span>by BuulSoft '26</span></div>
 
@@ -100,13 +114,13 @@ body.s2 .mid,body.s2 .ch,body.s2>.b3{display:none}
 </div>
 </div>
 <div class="card" id="pc">
-<div class="sr p q"><div class="fr"><small>F[spring]</small><div class="dual" id="sT"><div class="th" id="sth"></div></div></div><div class="fr"><small>F[friction]</small><div class="dual" id="fT"><div class="th" id="fth"></div></div><input id="fric" type="hidden" value="1"></div><label class="f">MAST<input id="mast" type="number" step="0.1" value="7.5" title="Follows 150% of spring force when the spring changes; can be edited"><span>[kN]</span></label><input id="spring" type="hidden" value="5"></div>
-<div class="sr p r2"><div class="fr"><small>Process</small><div class="dual" id="pT"><div class="seg"></div><div class="th" id="thin"></div><div class="th" id="thout"></div></div></div><label class="f">Max<input id="pmax" type="number" value="135" step="0.1" inputmode="decimal"><span>[bar]</span></label><input id="pin" type="hidden" value="75"><input id="pout" type="hidden" value="70"></div>
+<div class="sr p q"><div class="fr"><small>F[spring]</small><div class="dual" id="sT"><div class="th" id="sth"></div></div></div><div class="fr"><small>F[friction]</small><div class="dual" id="fT"><div class="th" id="fth"></div></div><input id="fric" type="hidden" value="1"></div><label class="f">MAST<input id="mast" type="number" step="0.1" value="12.5" title="Follows 250% of spring force when the spring changes; can be edited"><span>[kN]</span></label><input id="spring" type="hidden" value="5"></div>
+<div class="sr p r2"><div class="fr"><small>Process [bar]</small><div class="dual" id="pT"><div class="seg"></div><div class="th" id="thin"></div><div class="th" id="thout"></div></div></div><label class="fc"><small>Max Operating</small><input id="pmaxop" type="number" value="100" step="0.1" inputmode="decimal"></label><label class="fc"><small>Max Shut Off</small><input id="pmax" type="number" value="135" step="0.1" inputmode="decimal"></label><input id="pin" type="hidden" value="75"><input id="pout" type="hidden" value="70"></div>
 <div class="btns"><button data-c="op" id="bop"></button><button data-c="maxin">Max in</button><button data-c="maxout">Max out</button><button data-c="z0">0 dP @0</button><button data-c="zm">0 dP @Max</button></div>
 </div>
 
 <div class="mid">
-<div class="card sk"><input id="flow" type="hidden" value="over"><input id="fail" type="hidden" value="close"><div class="pv"><span>100%</span><input id="pos" type="range" min="0" max="100" value="0" disabled title="Valve position (0% only for now)"><span>0%</span></div><svg id="sketch" viewBox="0 0 200 264"></svg></div>
+<div class="card sk"><input id="flow" type="hidden" value="over"><input id="fail" type="hidden" value="close"><div class="pv"><span>100%</span><input id="pos" type="range" min="0" max="100" value="0" disabled title="Valve position (0% only for now)"><span>0%</span></div><div class="pv"><span id="supplyv"></span><input id="supplys" type="range" min="0" max="1000" step="1" value="452" title="Actuator air pressure (0-6 bar)"><input id="supply" type="hidden" value="4.2"><span>0</span></div><svg id="sketch" viewBox="0 0 200 264"></svg></div>
 <div class="cc">
 <div class="card"><i class="lb">Top view</i><svg id="top" viewBox="4 4 192 192"></svg></div>
 <div class="card"><i class="lb">Bottom view</i><svg id="bot" viewBox="4 4 192 192"></svg></div>
@@ -116,7 +130,7 @@ body.s2 .mid,body.s2 .ch,body.s2>.b3{display:none}
 <div class="b3"><button data-k="trend"></button><button data-k="flow"></button><button data-k="fail"></button><button data-k="dir"></button></div>
 <div class="card ch"><svg id="chart"></svg><canvas id="mc"></canvas></div>
 <div class="card v2"><div class="vt b3"><button data-k="trend"></button><button data-k="flow"></button><button data-k="fail"></button><button data-k="dir"></button></div><div id="tw"><canvas id="tc"></canvas><svg id="mw"></svg></div>
-<div class="tl"><span><i style="background:#2e9b57"></i>SF &gt; 150%</span><span><i style="background:#e6b800"></i>130-150%</span><span><i style="background:#f08a1c"></i>110-130%</span><span><i style="background:#d9382e"></i>&lt; 110%</span></div></div>
+<div class="tl"><span><i style="background:#2e9b57"></i>SF &gt; 150%</span><span><i style="background:#e6b800"></i>130-150%</span><span><i style="background:#f08a1c"></i>110-130%</span><span><i style="background:#d9382e"></i>&lt; 110%</span><span><i style="background:#7a1010"></i>negative</span><span><i style="background:#8e4fc2"></i>&gt; MAST</span></div></div>
 
 <script>
 const $=id=>document.getElementById(id), N=id=>parseFloat($(id).value)||0;
@@ -135,7 +149,7 @@ function dia(){ // seat en stem = % van plug
   const px=v=>`calc(22px + (100% - 44px)*${v})`; // duimcentrum 22px van de rand, balk loopt volledig
   const w=frozen||win();$('thin').style.left=px(g(pi,w));$('thout').style.left=px(g(po,w));$('thin').textContent=pi.toFixed(1);$('thout').textContent=po.toFixed(1);
   sg.style.left=px(g(lo,w));sg.style.width='calc((100% - 44px)*'+(g(hi,w)-g(lo,w))+')';
-  $('plugv').textContent=fr8(N('plug'))+'" '+Math.round(p)+' mm';$('seatv').textContent=N('seat').toFixed(1)+'% '+s.toFixed(1)+'mm';$('stemv').textContent=N('stem').toFixed(1)+'% '+t.toFixed(1)+'mm';
+  $('supplyv').textContent=N('supply').toFixed(1)+' bar';$('plugv').textContent=fr8(N('plug'))+'" '+Math.round(p)+' mm';$('seatv').textContent=N('seat').toFixed(1)+'% '+s.toFixed(1)+'mm';$('stemv').textContent=N('stem').toFixed(1)+'% '+t.toFixed(1)+'mm';
   const un=$('flow').value==='under',pu=un?'var(--hi)':'var(--lo)',pu4=un?'var(--hi4)':'var(--lo4)',po4=un?'var(--lo4)':'var(--hi4)';
   const bar=(id,i,w,col)=>{const b=$(id+'T').children[i];b.style.width=w+'%';b.style.background=col};
   bar('stem',0,N('seat'),po4);bar('stem',1,N('stem'),'#000'); // top view
@@ -239,15 +253,16 @@ function wf(s,c,W,H,mini){ // waterfall; mini = kleine overlay op de xy-grafiek 
   bars.push({n:'Net',v:cum,a:0,b:cum,net:true});
   const sp=f.spring,sfv=sp?cum/sp:-1; // lijnen op % van springkracht, zelfde richting als de veer
   const lines=[[.5,'#2e9b57'],[.3,'#e6b800'],[.1,'#f08a1c'],[0,'var(--tx)']];
-  const nc=sfv>=.5?lines[0][1]:sfv>=.3?lines[1][1]:sfv>=.1?lines[2][1]:'#d9382e';
-  const lv=bars.flatMap(b=>[b.a,b.b]).concat(0),hi=Math.max(...lv),lo=Math.min(...lv),rng=(hi-lo)||1;
+  const mast=N('mast'),over=mast>0&&Math.abs(cum)>mast,mastOn=mast>0&&Math.abs(cum)>=.7*mast; // MAST-lijn alleen als de net force in de buurt komt
+  const nc=over?'#8e4fc2':sfv<-1?'#7a1010':sfv<0?'#d9382e':sfv>=.5?lines[0][1]:sfv>=.3?lines[1][1]:sfv>=.1?lines[2][1]:'#d9382e';
+  const lv=bars.flatMap(b=>[b.a,b.b]).concat(mastOn?[0,Math.sign(cum||1)*mast]:[0]),hi=Math.max(...lv),lo=Math.min(...lv),rng=(hi-lo)||1;
   const top=mini?8:34,bot=H-(mini?11:20),y=v=>top+(hi-v)/rng*(bot-top);
-  const m=6,slot=(W-2*m)/bars.length,bw=slot*0.7;
+  const m=6,lp=(mini||document.body.classList.contains('wide'))?0:128,slot=(W-m-lp)/bars.length,bw=slot*0.82; // lp: vrije ruimte links voor de xy-overlay
   if(!mini)el(s,'text',{x:m,y:14,'font-size':12,'font-weight':600,fill:'var(--tx)'},(dir>0?'Opening':'Closing')+(dir===sd?' (spring)':'')+' \u00b7 kN');
-  if(!mini)el(s,'text',{x:142,y:16,'text-anchor':'start','font-size':15,'font-weight':700,fill:'var(--tx)'},'Safety Factor '+(f.spring?(Math.round(cum/f.spring*100)+100)+'%':'\u221e'));
+  if(!mini)el(s,'text',{x:162,y:16,'text-anchor':'start','font-size':14,'font-weight':700,fill:'var(--tx)'},'Safety Factor '+(f.spring?(Math.round(cum/f.spring*100)+100)+'%':'\u221e'));
   el(s,'line',{x1:m,x2:W-m,y1:y(0),y2:y(0),stroke:'var(--mu)'});
   bars.forEach((b,i)=>{
-    const x=m+i*slot+(slot-bw)/2,yt=y(Math.max(b.a,b.b)),ht=Math.max(Math.abs(y(b.a)-y(b.b)),1);
+    const x=lp+i*slot+(slot-bw)/2,yt=y(Math.max(b.a,b.b)),ht=Math.max(Math.abs(y(b.a)-y(b.b)),1);
     el(s,'rect',{x,y:yt,width:bw,height:ht,fill:b.net?nc:i===2?(c.under?'var(--hi)':'var(--lo)'):i===3?'url(#'+gid+')':(b.v>=0?'var(--pos)':'var(--neg)'),opacity:b.net?.75:.9});
     if(Math.abs(b.v)>1e-9){const len=Math.abs(y(b.b)-y(b.a));arrow(s,x+bw/2,y(b.a),x+bw/2,y(b.b),'#000',1.2,Math.min(6,len*0.6),Math.min(3,len*0.3))}
     el(s,'text',{x:x+bw/2,y:yt-4,'text-anchor':'middle','font-size':fs,fill:'var(--tx)'},b.v.toFixed(2));
@@ -255,11 +270,14 @@ function wf(s,c,W,H,mini){ // waterfall; mini = kleine overlay op de xy-grafiek 
     if(i<bars.length-1)el(s,'line',{x1:x+bw,x2:x+slot,y1:y(b.b),y2:y(b.b),stroke:'var(--mu)','stroke-dasharray':'2 2'});
   });
   if(sp)lines.forEach(([p,col],k)=>{const yy=y(sp*p),pw=mini?22:36,ph=mini?10:14,x0=W-m-pw-(k%2?pw+3:0);el(s,'line',{x1:m,x2:W-m,y1:yy,y2:yy,stroke:col,'stroke-width':1.5,'stroke-dasharray':'5 3'});el(s,'rect',{x:x0,y:yy-ph/2,width:pw,height:ph,rx:3,fill:col});el(s,'text',{x:x0+pw/2,y:yy+(mini?2.7:4),'text-anchor':'middle','font-size':mini?7:11,'font-weight':700,fill:p===0?'var(--bg)':'#000'},(Math.round(p*100)+100)+'%')});
+  if(mastOn){const yy=y(Math.sign(cum||1)*mast),pw=mini?26:44,ph=mini?10:14;el(s,'line',{x1:m,x2:W-m,y1:yy,y2:yy,stroke:'#8e4fc2','stroke-width':1.5,'stroke-dasharray':'2 3'});el(s,'rect',{x:lp+2,y:yy-ph/2,width:pw,height:ph,rx:3,fill:'#8e4fc2'});el(s,'text',{x:lp+2+pw/2,y:yy+(mini?2.7:4),'text-anchor':'middle','font-size':mini?7:11,'font-weight':700,fill:'#fff'},'MAST')}
 }
 function chart(c){const s=$('chart');wf(s,c,s.clientWidth||380,s.clientHeight||200,false)}
 function update(){if(!preset)op={i:N('pin'),o:N('pout')};$('bop').textContent='Op '+Math.round(op.i)+'→'+Math.round(op.o);const c=calc();syncMast();sketch(c);circles(c);chart(c);lbl();trend(c)}
 // plug-slider niet-lineair (kwadratisch): fijne stappen bij kleine maten; waarde in achtsten inch (3..64)
 $('plugs').addEventListener('input',()=>{$('plug').value=Math.round(3+61*($('plugs').value/1000)**2)});
+// actuator-luchtdruk 0-6 bar, verticaal en niet-lineair: fijnere stappen bij hoge druk
+$('supplys').addEventListener('input',()=>{$('supply').value=(Math.round(6*(1-(1-$('supplys').value/1000)**2)*10)/10).toFixed(1)});
 document.querySelectorAll('input,select').forEach(e=>e.addEventListener('input',update));
 function sym(id,min,max){ // symmetrische slider: balkbreedte = % van plug (track = plug)
   const inp=$(id),t=$(id+'T');
@@ -309,39 +327,61 @@ function xy(cv,W,H,mini){ // P[in] (x) tegen P[out] (y); mini = kleine overlay o
   cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
   const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);
   const tx=getComputedStyle(document.body).color;
-  const ml=mini?19:46,mb=mini?12:36,mt=mini?11:12,mr=mini?8:14,S=Math.max(30,Math.min(W-ml-mr,H-mt-mb)),x0=ml+Math.max(0,(W-ml-mr-S)/2),y0=mt+Math.max(0,(H-mt-mb-S)/2),pm=Math.max(N('pmax'),1);
+  // groot: y-cijfers staan in de plot, dus de plot loopt (bijna) over de volle breedte; pc: rechthoekig, vult het hele vak
+  const rect=!mini&&document.body.classList.contains('wide');
+  const ml=mini?19:6,mb=mini?12:17,mt=mini?11:19,mr=mini?8:6,S=Math.max(30,Math.min(W-ml-mr,H-mt-mb)),SX=rect?W-ml-mr:S,SY=rect?H-mt-mb:S;
+  const x0=ml+Math.max(0,(W-ml-mr-SX)/2),y0=mt+Math.max(0,(H-mt-mb-SY)/2),pm=Math.max(N('pmax'),1);
   const p=pmm(),As=Math.PI/4*(p*N('seat')/100)**2,Ast=Math.PI/4*(p*N('stem')/100)**2,k=1e-4;
-  const un=$('flow').value==='under',sd=$('fail').value==='open'?1:-1,dir=flip?-sd:sd,sp=sd*N('spring'),fr=N('fric'),n=mini?24:40,cell=S/n;
-  for(let i=0;i<n;i++)for(let j=0;j<n;j++){
-    const pin=(i+.5)/n*pm,pout=(j+.5)/n*pm,dP=Math.abs(pin-pout);
-    const net=sp-dir*fr+(un?pin:pout)*Ast*k+(un?1:-1)*dP*As*k,sf=sp?net/sp:-1;
-    g.fillStyle=sf>=.5?'rgb(140,200,163)':sf>=.3?'rgb(241,216,115)':sf>=.1?'rgb(247,191,130)':'rgb(234,146,140)';
-    g.fillRect(x0+i*cell,y0+S-(j+1)*cell,cell+.6,cell+.6);
+  const un=$('flow').value==='under',sd=$('fail').value==='open'?1:-1,dir=flip?-sd:sd,sp=sd*N('spring'),fr=N('fric'),mast=N('mast');
+  const netF=(pin,pout)=>sp-dir*fr+(un?pin:pout)*Ast*k+(un?1:-1)*Math.abs(pin-pout)*As*k;
+  // fijne resolutie: nx x ny pixels, geschaald zonder uitsmeren
+  const nx=mini?60:Math.min(260,Math.max(60,Math.round(SX/1.5))),ny=mini?60:Math.min(260,Math.max(60,Math.round(SY/1.5))),off=document.createElement('canvas');off.width=nx;off.height=ny;
+  const og=off.getContext('2d'),im=og.createImageData(nx,ny),d=im.data,C=[[140,200,163],[241,216,115],[247,191,130],[234,146,140],[196,160,228],[139,30,30]];
+  for(let i=0;i<nx;i++)for(let j=0;j<ny;j++){
+    const net=netF((i+.5)/nx*pm,(j+.5)/ny*pm),sf=sp?net/sp:-1;
+    const c=(mast>0&&Math.abs(net)>mast)?C[4]:sf<-1?C[5]:sf>=.5?C[0]:sf>=.3?C[1]:sf>=.1?C[2]:C[3],q=((ny-1-j)*nx+i)*4;
+    d[q]=c[0];d[q+1]=c[1];d[q+2]=c[2];d[q+3]=255;
   }
-  g.strokeStyle=tx;g.fillStyle=tx;g.lineWidth=mini?1:1.5;g.strokeRect(x0,y0,S,S);
-  g.setLineDash([5,4]);g.lineWidth=1;g.beginPath();g.moveTo(x0,y0+S);g.lineTo(x0+S,y0);g.stroke();g.setLineDash([]);
-  g.font=(mini?8:11)+'px system-ui,sans-serif';const dg=pm%1?1:0;
-  (mini?[0,1]:[0,.5,1]).forEach(f=>{g.textAlign='center';g.fillText((f*pm).toFixed(dg),x0+f*S,y0+S+(mini?9:14));g.textAlign='right';g.fillText((f*pm).toFixed(dg),x0-(mini?3:5),y0+S-f*S+(mini?3:4))});
-  g.textAlign='center';g.font=(mini?8:12)+'px system-ui,sans-serif';g.fillText(mini?'P in':'P in [bar]',x0+S/2,y0+S+(mini?9:30));
-  if(mini){g.textAlign='left';g.fillText('P out',2,8)}else{g.save();g.translate(14,y0+S/2);g.rotate(-Math.PI/2);g.fillText('P out [bar]',0,0);g.restore()}
-  const px=x0+N('pin')/pm*S,py=y0+S-N('pout')/pm*S;
-  g.setLineDash([3,3]);g.beginPath();g.moveTo(px,y0+S);g.lineTo(px,py);g.lineTo(x0,py);g.stroke();g.setLineDash([]);
+  og.putImageData(im,0,0);g.imageSmoothingEnabled=false;g.drawImage(off,x0,y0,SX,SY);
+  g.strokeStyle=tx;g.fillStyle=tx;g.lineWidth=mini?1:1.5;g.strokeRect(x0,y0,SX,SY);
+  g.setLineDash([5,4]);g.lineWidth=1;g.beginPath();g.moveTo(x0,y0+SY);g.lineTo(x0+SX,y0);g.stroke();g.setLineDash([]);
+  g.font=(mini?8:11)+'px system-ui,sans-serif';const dg=pm%1?1:0,ty=y0+SY+(mini?9:13);
+  [0,1].forEach(f=>{g.textAlign=f?'right':'center';g.fillText((f*pm).toFixed(dg),x0+f*SX,ty)});
+  if(mini)[0,1].forEach(f=>{g.textAlign='right';g.fillText((f*pm).toFixed(dg),x0-3,y0+SY-f*SY+3)});
+  else{g.textAlign='left';g.lineJoin='round';g.lineWidth=3;g.strokeStyle='#fff';
+    [0,.5,1].forEach(f=>{const yy=f===1?y0+11:f===0?y0+SY-4:y0+SY/2+4,s=(f*pm).toFixed(dg);g.strokeText(s,x0+3,yy);g.fillText(s,x0+3,yy)});
+    g.strokeStyle=tx;g.lineWidth=1}
+  g.textAlign='center';g.fillText(mini?'P in':'P in [bar]',x0+SX/2,ty);
+  g.textAlign='left';g.fillText(mini?'P out':'P out [bar]',2,mini?8:13);
+  const px=x0+N('pin')/pm*SX,py=y0+SY-N('pout')/pm*SY;
+  g.setLineDash([3,3]);g.beginPath();g.moveTo(px,y0+SY);g.lineTo(px,py);g.lineTo(x0,py);g.stroke();g.setLineDash([]);
   g.beginPath();g.arc(px,py,mini?3.5:6,0,7);g.fill();g.strokeStyle='#fff';g.lineWidth=mini?1.2:2;g.stroke();
-  g.font='bold '+(mini?7.5:13)+'px system-ui,sans-serif';g.fillStyle=tx;g.textAlign='left';g.fillText('Reverse Flow',x0+(mini?3:7),y0+(mini?9:18));g.textAlign='right';g.fillText('Normal Flow',x0+S-(mini?3:7),y0+S-(mini?4:8));
-  if(!mini){const r=px>x0+S*.6;g.textAlign=r?'right':'left';g.font='bold 12px system-ui,sans-serif';g.fillText(N('pin').toFixed(1)+' / '+N('pout').toFixed(1),px+(r?-10:10),py-10)}
-  return {x0,y0,S,pm};
+  const rx=x0+(mini?3:28);
+  g.font='bold '+(mini?7.5:13)+'px system-ui,sans-serif';g.fillStyle=tx;g.textAlign='left';g.fillText('Reverse Flow',rx,y0+(mini?9:18));g.textAlign='right';g.fillText('Normal Flow',x0+SX-(mini?3:7),y0+SY-(mini?4:8));
+  // Net Force-label: kiest een vrije plek (niet over overlay, 'Reverse/Normal Flow', y-cijfers of de rand)
+  const lab=avoid=>{if(mini)return;const txt='Net Force '+netF(N('pin'),N('pout')).toFixed(2)+' kN';
+    g.font='bold 12px system-ui,sans-serif';const w=g.measureText(txt).width;
+    const rs=[{x:rx,y:y0+5,w:96,h:16},{x:x0+SX-103,y:y0+SY-21,w:96,h:16},{x:x0,y:y0,w:26,h:SY}].concat(avoid||[]);
+    const cands=[[px+10,py-10,'left'],[px+10,py+20,'left'],[px-10,py-10,'right'],[px-10,py+20,'right']];let pick=cands[0];
+    for(const c of cands){const r={x:c[2]==='left'?c[0]:c[0]-w,y:c[1]-12,w:w,h:16};
+      const inside=r.x>=x0&&r.x+r.w<=x0+SX&&r.y>=y0&&r.y+r.h<=y0+SY,hit=rs.some(q=>r.x<q.x+q.w&&r.x+r.w>q.x&&r.y<q.y+q.h&&r.y+r.h>q.y);
+      if(inside&&!hit){pick=c;break}}
+    g.textAlign=pick[2];g.lineWidth=3;g.strokeStyle='#fff';g.lineJoin='round';g.strokeText(txt,pick[0],pick[1]);g.fillStyle=tx;g.fillText(txt,pick[0],pick[1])};
+  return {x0,y0,S,SX,SY,pm,lab};
 }
 function trend(c){
+  if(document.body.classList.contains('wide')){const w=$('tw');TG=xy($('tc'),w.clientWidth,w.clientHeight,false);TG.lab([]);return}
   if(document.body.classList.contains('s2')){const w=$('tw');TG=xy($('tc'),w.clientWidth,w.clientHeight,false);
     // waterfall-overlay op de xy-grafiek: linksboven, of rechtsonder als de stip daar zit
-    const sm=$('mw'),MW=170,MH=118,dx=TG.x0+N('pin')/TG.pm*TG.S,dy=TG.y0+TG.S-N('pout')/TG.pm*TG.S,ax=TG.x0+8,ay=TG.y0+24;
+    const sm=$('mw'),kk=Math.min(1.25,(TG.S-46)/288),MW=170*kk,MH=118*kk,dx=TG.x0+N('pin')/TG.pm*TG.S,dy=TG.y0+TG.S-N('pout')/TG.pm*TG.S,ax=TG.x0+6,ay=TG.y0+24; // kk: past de overlay zo aan dat hij niet over de diagonaal gaat
     const inA=dx>ax-12&&dx<ax+MW+12&&dy>ay-12&&dy<ay+MH+12;
     wf(sm,c,MW,MH,true);
-    sm.style.cssText=`width:${MW}px;height:${MH}px;left:${inA?TG.x0+TG.S-MW-8:ax}px;top:${inA?TG.y0+TG.S-MH-24:ay}px`}
+    const lx=inA?TG.x0+TG.S-MW-6:ax,ly=inA?TG.y0+TG.S-MH-24:ay;
+    sm.style.cssText=`width:${MW}px;height:${MH}px;left:${lx}px;top:${ly}px`;TG.lab([{x:lx,y:ly,w:MW,h:MH}])}
   else TGm=xy($('mc'),112,112,true);
 }
 function tset(e,cv,T){if(!T)return;const r=cv.getBoundingClientRect(),cl=v=>Math.round(Math.min(1,Math.max(0,v))*T.pm*10)/10;
-  $('pin').value=cl((e.clientX-r.left-T.x0)/T.S);$('pout').value=cl(1-(e.clientY-r.top-T.y0)/T.S);preset=false;update()}
+  $('pin').value=cl((e.clientX-r.left-T.x0)/T.SX);$('pout').value=cl(1-(e.clientY-r.top-T.y0)/T.SY);preset=false;update()}
 [['tc',()=>TG],['mc',()=>TGm]].forEach(([id,gt])=>{const cv=$(id);
   cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);tset(e,cv,gt())});
   cv.addEventListener('pointermove',e=>{if(cv.hasPointerCapture(e.pointerId))tset(e,cv,gt())})});
@@ -350,8 +390,12 @@ function lbl(){const sd=$('fail').value==='open'?1:-1,dir=flip?-sd:sd;
   document.querySelectorAll('.b3 button').forEach(b=>{const k=b.dataset.k;b.textContent=k==='trend'?'Trend: '+(document.body.classList.contains('s2')?'Pressure':'Force'):k==='flow'?'Flow: '+($('flow').value==='over'?'Over':'Under'):k==='fail'?'Fail: '+($('fail').value==='open'?'Open':'Close'):(dir>0?'Opening':'Closing')})}
 document.querySelectorAll('.b3 button').forEach(b=>b.onclick=()=>{const k=b.dataset.k;
   if(k==='trend')document.body.classList.toggle('s2');else if(k==='flow')$('flow').value=$('flow').value==='over'?'under':'over';else if(k==='fail')$('fail').value=$('fail').value==='open'?'close':'open';else flip=!flip;update()});
-let lastSp=null; // MAST volgt 150% van de springkracht zodra de spring verandert; daarna handmatig aan te passen
-function syncMast(){const s=N('spring');if(lastSp===null||s!==lastSp)$('mast').value=(1.5*s).toFixed(1);lastSp=s}
+let lastSp=null; // MAST volgt 250% van de springkracht zodra de spring verandert; daarna handmatig aan te passen
+function syncMast(){const s=N('spring');if(lastSp===null||s!==lastSp)$('mast').value=(2.5*s).toFixed(1);lastSp=s}
+// pc-indeling aan/uit op schermgrootte
+const mq=window.matchMedia('(min-width:1000px) and (min-height:600px)');
+function wide(u){document.body.classList.toggle('wide',mq.matches);if(mq.matches)document.body.classList.remove('s2');if(u)update()}
+mq.addEventListener('change',()=>wide(true));wide();
 window.addEventListener('resize',update);
 // plug: mm (stap 0,1) of inch (stappen van 1/8 inch); intern altijd mm
 let pUnit='in'; // plug in stappen van 1/8 inch, mm wordt ernaast getoond
