@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="nl"><head><meta charset="utf-8">
+<html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Globe valve krachten</title>
+<title>Globe valve forces</title>
 <style>
 :root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
 --bg:#f6f7f9;--card:#fff;--tx:#1b1f24;--mu:#667;--bd:#d5d9df;--hi:#d9382e;--lo:#2a6fd6;--mid:#9aa0a8;--lg:#d3d6db;--pos:#2e9b57;--neg:#d9822e;--hi4:color-mix(in srgb,var(--hi) 40%,var(--card));--lo4:color-mix(in srgb,var(--lo) 40%,var(--card))}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171b;--card:#1d2127;--tx:#e8eaed;--mu:#9aa0a8;--bd:#3a4048;--hi:#ff6b5e;--lo:#6aa3ff;--mid:#6b7078;--lg:#4b5059}}
 html,body{height:100%;margin:0}
 .tb{display:flex;justify-content:space-between;align-items:baseline;padding:1px 6px;font-size:13px;font-weight:700;white-space:nowrap}
-.tb span:last-child{font-size:11px;font-weight:400;color:var(--mu)}
+.tb span:last-child{display:flex;gap:8px;align-items:center;font-size:11px;font-weight:400;color:var(--mu)}
+.tb .ub{padding:3px 8px;font-size:11px}
 body{background:var(--bg);color:var(--tx);font:12px system-ui,sans-serif;padding:4px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;overflow:hidden}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:4px}
 .in{display:flex;flex-direction:column;gap:3px}
@@ -31,13 +32,14 @@ body{background:var(--bg);color:var(--tx);font:12px system-ui,sans-serif;padding
 .dual .seg{position:absolute;top:50%;height:6px;margin-top:-3px;background:var(--mid)}
 .dual .th{position:absolute;top:50%;width:44px;height:32px;transform:translate(-50%,-50%);border-radius:16px;color:#fff;font:600 13px system-ui,sans-serif;display:flex;align-items:center;justify-content:center;pointer-events:none}
 #thin{background:var(--hi)}#thout{background:var(--lo)}#sth{background:var(--neg)}
-.sr{display:grid;grid-template-columns:44px 1fr 70px;align-items:center;gap:6px;font-size:11px;color:var(--mu);white-space:nowrap}
+.sr{display:grid;grid-template-columns:44px 1fr 84px;align-items:center;gap:6px;font-size:11px;color:var(--mu);white-space:nowrap}
 .sr input[type=range]{width:100%;margin:0}
+.ub{font-size:11px;padding:6px 2px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);white-space:nowrap}
 .sr>span:last-of-type{text-align:right}
 input[type=range]{height:32px}
 .in.col{display:none}
 .btns{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:4px}
-.btns button{font-size:11px;padding:8px 2px;min-height:38px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
+.btns button{font-size:11px;white-space:nowrap;padding:4px 2px;min-height:30px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
 .sym{position:relative;height:32px;border-radius:16px;background:var(--lg);border:1px solid var(--bd);touch-action:none;cursor:ew-resize}
 .sym .bar{position:absolute;left:50%;top:0;height:100%;transform:translateX(-50%);border-radius:16px}
 .sym .h::before,.sym .h::after{content:'';position:absolute;top:4px;bottom:4px;width:4px;border-radius:2px;background:var(--card)}
@@ -47,7 +49,9 @@ input[type=range]{height:32px}
 .f input,.f select{flex:1;min-width:0;width:100%;font:inherit;font-size:14px;padding:6px 4px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--tx)}
 .f input[type=range]{padding:0}
 .mid{flex:1;min-height:0;display:flex;gap:4px}
-.sk{flex:1.2;min-width:0;display:flex;flex-direction:column;gap:2px}
+.sk{flex:1.2;min-width:0;display:flex;flex-direction:row;gap:2px}
+.pv{display:flex;flex-direction:column;align-items:center;width:34px;font-size:10px;color:var(--mu);padding:2px 0}
+.pv input[type=range]{writing-mode:vertical-lr;direction:rtl;flex:1;height:auto;width:24px;margin:4px 0;min-height:0}
 .sk svg{flex:1;min-width:0;min-height:0}
 .tg{display:flex;flex-direction:column;justify-content:center;gap:5px;width:62px;font-size:11px;color:var(--mu)}
 .tg b{font-weight:600;margin-top:4px}
@@ -63,14 +67,26 @@ svg{width:100%;height:100%;min-height:0;display:block}
   html{background:color-mix(in srgb,var(--bg) 88%,#000)}
   body{max-width:calc(100vh*.46);margin:0 auto;border:1px solid var(--bd);border-radius:14px}
 }
-#dir{position:absolute;top:3px;right:4px;font-size:11px;padding:2px 6px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--tx)}
+.b3{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.b3 button{font-size:12px;min-height:34px;padding:2px;line-height:1.15;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
+
+.v2{display:none;flex:1;min-height:0;flex-direction:column;gap:4px}
+body.s2 .v2{display:flex}
+body.s2 .mid,body.s2 .ch,body.s2>.b3{display:none}
+#mc{position:absolute;left:30px;top:40px;z-index:2;background:var(--card);border:1px solid var(--bd);border-radius:6px;opacity:.94;touch-action:none;cursor:crosshair}
+.vt button{font-size:15px;min-height:58px}
+#tw{flex:1;min-height:0;position:relative}
+#mw{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--bd);border-radius:6px;opacity:.95}
+#tc{display:block;touch-action:none;cursor:crosshair}
+.tl{display:flex;gap:10px;font-size:11px;color:var(--mu);justify-content:center;flex-wrap:wrap}
+.tl i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
 </style></head><body>
 <div class="tb"><span>Globe valve Forces Visualized</span><span>by BuulSoft '26</span></div>
 
 <div class="card in">
 <div class="r">
-<div class="sr"><span>Plug</span><input id="plug" type="range" min="10" max="200" step="1" value="50"><span id="plugv"></span></div>
-<div class="sr"><span>Stem</span><div class="sym" id="stemT"><div class="bar"></div><div class="bar h"></div></div><span id="stemv"></span><input id="stem" type="hidden" value="25"></div>
+<div class="sr"><span>Plug</span><input id="plugs" type="range" min="0" max="1000" step="1" value="462"><input id="plug" type="hidden" value="16"><span id="plugv"></span></div>
+<div class="sr"><span>Stem</span><div class="sym" id="stemT"><div class="bar"></div><div class="bar h"></div></div><span id="stemv"></span><input id="stem" type="hidden" value="50"></div>
 <div class="sr"><span>Seat</span><div class="sym" id="seatT"><div class="bar h"></div><div class="bar"></div></div><span id="seatv"></span><input id="seat" type="hidden" value="90"></div>
 </div>
 <div class="r">
@@ -84,20 +100,23 @@ svg{width:100%;height:100%;min-height:0;display:block}
 </div>
 </div>
 <div class="card" id="pc">
-<div class="sr p q"><div class="fr"><small>F[spring]</small><div class="dual" id="sT"><div class="th" id="sth"></div></div></div><div class="fr"><small>F[friction]</small><div class="dual" id="fT"><div class="th" id="fth"></div></div><input id="fric" type="hidden" value="1"></div><label class="f">MAST<input id="mast" type="number" value="300"><span>[kN]</span></label><input id="spring" type="hidden" value="5"></div>
-<div class="sr p r2"><div class="fr"><small>Process</small><div class="dual" id="pT"><div class="seg"></div><div class="th" id="thin"></div><div class="th" id="thout"></div></div></div><label class="f">Max<input id="pmax" type="number" value="135" step="1" inputmode="numeric"><span>[bar]</span></label><input id="pin" type="hidden" value="75"><input id="pout" type="hidden" value="70"></div>
-<div class="btns"><button data-c="op" id="bop"></button><button data-c="maxin">Max in</button><button data-c="maxout">Max uit</button><button data-c="z0">0 dP @0</button><button data-c="zm">0 dP @Max</button></div>
+<div class="sr p q"><div class="fr"><small>F[spring]</small><div class="dual" id="sT"><div class="th" id="sth"></div></div></div><div class="fr"><small>F[friction]</small><div class="dual" id="fT"><div class="th" id="fth"></div></div><input id="fric" type="hidden" value="1"></div><label class="f">MAST<input id="mast" type="number" step="0.1" value="7.5" title="Follows 150% of spring force when the spring changes; can be edited"><span>[kN]</span></label><input id="spring" type="hidden" value="5"></div>
+<div class="sr p r2"><div class="fr"><small>Process</small><div class="dual" id="pT"><div class="seg"></div><div class="th" id="thin"></div><div class="th" id="thout"></div></div></div><label class="f">Max<input id="pmax" type="number" value="135" step="0.1" inputmode="decimal"><span>[bar]</span></label><input id="pin" type="hidden" value="75"><input id="pout" type="hidden" value="70"></div>
+<div class="btns"><button data-c="op" id="bop"></button><button data-c="maxin">Max in</button><button data-c="maxout">Max out</button><button data-c="z0">0 dP @0</button><button data-c="zm">0 dP @Max</button></div>
 </div>
 
 <div class="mid">
-<div class="card sk"><input id="flow" type="hidden" value="over"><input id="fail" type="hidden" value="close"><svg id="sketch" viewBox="-70 0 270 256"></svg><label class="f" style="padding:0 4px">Pos <span id="posv">0%</span><input id="pos" type="range" min="0" max="0" value="0" disabled></label></div>
+<div class="card sk"><input id="flow" type="hidden" value="over"><input id="fail" type="hidden" value="close"><div class="pv"><span>100%</span><input id="pos" type="range" min="0" max="100" value="0" disabled title="Valve position (0% only for now)"><span>0%</span></div><svg id="sketch" viewBox="0 0 200 264"></svg></div>
 <div class="cc">
 <div class="card"><i class="lb">Top view</i><svg id="top" viewBox="4 4 192 192"></svg></div>
 <div class="card"><i class="lb">Bottom view</i><svg id="bot" viewBox="4 4 192 192"></svg></div>
 </div>
 </div>
 
-<div class="card ch"><button id="dir"></button><svg id="chart"></svg></div>
+<div class="b3"><button data-k="trend"></button><button data-k="flow"></button><button data-k="fail"></button><button data-k="dir"></button></div>
+<div class="card ch"><svg id="chart"></svg><canvas id="mc"></canvas></div>
+<div class="card v2"><div class="vt b3"><button data-k="trend"></button><button data-k="flow"></button><button data-k="fail"></button><button data-k="dir"></button></div><div id="tw"><canvas id="tc"></canvas><svg id="mw"></svg></div>
+<div class="tl"><span><i style="background:#2e9b57"></i>SF &gt; 150%</span><span><i style="background:#e6b800"></i>130-150%</span><span><i style="background:#f08a1c"></i>110-130%</span><span><i style="background:#d9382e"></i>&lt; 110%</span></div></div>
 
 <script>
 const $=id=>document.getElementById(id), N=id=>parseFloat($(id).value)||0;
@@ -105,18 +124,18 @@ const NS='http://www.w3.org/2000/svg';
 function el(p,t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;p.appendChild(e);return e}
 
 function dia(){ // seat en stem = % van plug
-  const p=N('plug'),s=p*N('seat')/100,t=p*N('stem')/100;
+  const p=pmm(),s=p*N('seat')/100,t=p*N('stem')/100;
   // spring max = 2x worst case sluitkracht: Pmax·A_stem + (Pmax-Pout)·A_seat + friction (flow Under)
   const need=(N('pmax')*Math.PI/4*t*t+Math.abs(N('pmax')-N('pout'))*Math.PI/4*s*s)*1e-4+N('fric');
   $('spring').max=Math.max(Math.ceil(2*need*10)/10,0.1);
   const smax=parseFloat($('spring').max);if(N('spring')>smax)$('spring').value=smax;
   const sw_=sfrozen||{c:N('spring'),m:smax};$('sth').style.left=gS(N('spring'),sw_)*100+'%';$('sth').textContent=N('spring').toFixed(1);
-  const pm=Math.max(Math.round(N('pmax')),1);['pin','pout'].forEach(k=>{if(N(k)>pm)$(k).value=pm});
+  const pm=Math.max(N('pmax'),1);['pin','pout'].forEach(k=>{if(N(k)>pm)$(k).value=pm});
   const pi=N('pin'),po=N('pout'),lo=Math.min(pi,po),hi=Math.max(pi,po),sg=$('pT').firstElementChild;
   const px=v=>`calc(22px + (100% - 44px)*${v})`; // duimcentrum 22px van de rand, balk loopt volledig
-  const w=frozen||win();$('thin').style.left=px(g(pi,w));$('thout').style.left=px(g(po,w));$('thin').textContent=pi;$('thout').textContent=po;
+  const w=frozen||win();$('thin').style.left=px(g(pi,w));$('thout').style.left=px(g(po,w));$('thin').textContent=pi.toFixed(1);$('thout').textContent=po.toFixed(1);
   sg.style.left=px(g(lo,w));sg.style.width='calc((100% - 44px)*'+(g(hi,w)-g(lo,w))+')';
-  $('plugv').textContent=p+'mm';$('seatv').textContent=N('seat')+'% '+s.toFixed(0)+'mm';$('stemv').textContent=N('stem')+'% '+t.toFixed(0)+'mm';
+  $('plugv').textContent=fr8(N('plug'))+'" '+Math.round(p)+' mm';$('seatv').textContent=N('seat').toFixed(1)+'% '+s.toFixed(1)+'mm';$('stemv').textContent=N('stem').toFixed(1)+'% '+t.toFixed(1)+'mm';
   const un=$('flow').value==='under',pu=un?'var(--hi)':'var(--lo)',pu4=un?'var(--hi4)':'var(--lo4)',po4=un?'var(--lo4)':'var(--hi4)';
   const bar=(id,i,w,col)=>{const b=$(id+'T').children[i];b.style.width=w+'%';b.style.background=col};
   bar('stem',0,N('seat'),po4);bar('stem',1,N('stem'),'#000'); // top view
@@ -144,24 +163,30 @@ function arrow(s,x1,y1,x2,y2,col,sw=2.5,L=8,W=4){
 function sketch(c){
   const s=$('sketch');s.innerHTML='';
   const pu=c.under?'var(--hi)':'var(--lo)', po=c.under?'var(--lo)':'var(--hi)', ln={stroke:'var(--tx)','stroke-width':1.6,fill:'none'};
-  // drukzones
-  el(s,'path',{d:'M30 200 H88 V200 H112 V238 H22 V200 Z',fill:pu,opacity:.4});
-  el(s,'path',{d:'M30 168 H170 V200 H178 V238 H112 V200 H30 Z',fill:po,opacity:.4});
-  // lichaam
-  el(s,'path',{d:'M22 200 H30 V168 H70 M130 168 H170 V200 H178 M22 238 H178 M30 200 H88 M112 200 V238',...ln});
-  el(s,'rect',{x:10,y:192,width:12,height:54,fill:'var(--card)',stroke:'var(--tx)'});
-  el(s,'rect',{x:178,y:192,width:12,height:54,fill:'var(--card)',stroke:'var(--tx)'});
+  // gietwerk: afgeronde S-vorm zoals op de foto
+  el(s,'path',{d:'M22 192 C40 192 46 170 70 166 H130 C150 168 160 192 178 192 V246 C140 252 60 252 22 246 Z',fill:'var(--lg)',opacity:.55});
+  // drukzones: onder de seat (inlaat-bowl) en boven/uitlaat
+  const dU='M22 200 H64 C78 200 82 198 88 198 H112 C124 204 124 226 116 238 H22 Z';
+  const dO='M64 168 H136 C158 168 166 184 178 200 V238 H116 C124 226 124 204 112 198 H88 C82 198 78 200 64 200 H34 C34 184 44 168 64 168 Z';
+  el(s,'path',{d:dU,fill:pu,opacity:.4});el(s,'path',{d:dO,fill:po,opacity:.4});
+  el(s,'path',{d:dU,...ln});el(s,'path',{d:dO,...ln});
+  el(s,'path',{d:'M22 192 C40 192 46 170 70 166 M130 166 C150 168 160 192 178 192 M22 246 C60 252 140 252 178 246',...ln});
+  el(s,'rect',{x:10,y:192,width:12,height:54,rx:3,fill:'var(--card)',stroke:'var(--tx)'});
+  el(s,'rect',{x:178,y:192,width:12,height:54,rx:3,fill:'var(--card)',stroke:'var(--tx)'});
   // zitring + plug (gesloten)
-  el(s,'rect',{x:84,y:198,width:4,height:7,fill:'var(--mid)',stroke:'var(--tx)'});
-  el(s,'rect',{x:112,y:198,width:4,height:7,fill:'var(--mid)',stroke:'var(--tx)'});
-  el(s,'path',{d:'M86 188 H114 L112 198 H88 Z',fill:'var(--mid)',stroke:'var(--tx)'});
+  el(s,'rect',{x:84,y:198,width:4,height:7,rx:1,fill:'var(--mid)',stroke:'var(--tx)'});
+  el(s,'rect',{x:112,y:198,width:4,height:7,rx:1,fill:'var(--mid)',stroke:'var(--tx)'});
+  // plug zoals op de foto: cilinder met afgeronde schouder, bolle (halfellips) onderkant die op de seat rust
+  el(s,'path',{d:'M86 177 Q86 172 91 172 H109 Q114 172 114 177 V190 A14 16 0 0 1 86 190 Z',fill:'var(--mid)',stroke:'var(--tx)','stroke-linejoin':'round'});
   // bonnet, stem, yoke, actuator
-  el(s,'rect',{x:68,y:162,width:64,height:8,fill:'var(--card)',stroke:'var(--tx)'});
-  el(s,'rect',{x:82,y:122,width:36,height:40,fill:'var(--card)',stroke:'var(--tx)'});
-  el(s,'rect',{x:88,y:112,width:24,height:10,fill:'var(--mid)',stroke:'var(--tx)'});
+  el(s,'rect',{x:72,y:154,width:8,height:8,rx:1,fill:'var(--mid)',stroke:'var(--tx)'});
+  el(s,'rect',{x:120,y:154,width:8,height:8,rx:1,fill:'var(--mid)',stroke:'var(--tx)'});
+  el(s,'rect',{x:66,y:160,width:68,height:10,rx:3,fill:'var(--card)',stroke:'var(--tx)'});
+  el(s,'rect',{x:82,y:122,width:36,height:38,rx:5,fill:'var(--card)',stroke:'var(--tx)'});
+  el(s,'rect',{x:88,y:112,width:24,height:10,rx:3,fill:'var(--mid)',stroke:'var(--tx)'});
   el(s,'path',{d:'M74 162 V72 M126 162 V72',...ln});
   const sw=Math.max(1.5,28*N('stem')/100); // stembreedte t.o.v. plug (28 breed in tekening)
-  el(s,'rect',{x:100-sw/2,y:46,width:sw,height:142,fill:'var(--mid)',stroke:'var(--tx)'});
+  el(s,'rect',{x:100-sw/2,y:46,width:sw,height:126,fill:'var(--mid)',stroke:'var(--tx)'});
   el(s,'rect',{x:55,y:20,width:90,height:52,rx:8,fill:'var(--card)',stroke:'var(--tx)','stroke-width':1.6});
   el(s,'path',{d:'M57 46 Q100 40 143 46',...ln});
   // veer in actuator: Fail Close = bovenkamer, Fail Open = onderkamer
@@ -178,22 +203,15 @@ function sketch(c){
   const r=c.under;
   if(r){arrow(s,1,219,18,219,'var(--tx)');arrow(s,182,219,199,219,'var(--tx)')}
   else{arrow(s,199,219,182,219,'var(--tx)');arrow(s,18,219,1,219,'var(--tx)')}
-  el(s,'text',{x:16,y:254,'text-anchor':'middle','font-size':9,fill:'var(--mu)'},r?'IN':'OUT');
-  el(s,'text',{x:184,y:254,'text-anchor':'middle','font-size':9,fill:'var(--mu)'},r?'OUT':'IN');
-  el(s,'text',{x:100,y:254,'text-anchor':'middle','font-size':9,fill:'var(--tx)'},'Flow '+(r?'Under':'Over'));
+  el(s,'text',{x:16,y:260,'text-anchor':'middle','font-size':9,fill:'var(--mu)'},r?'IN':'OUT');
+  el(s,'text',{x:184,y:260,'text-anchor':'middle','font-size':9,fill:'var(--mu)'},r?'OUT':'IN');
+  el(s,'text',{x:100,y:260,'text-anchor':'middle','font-size':9,fill:'var(--tx)'},'Flow '+(r?'Under':'Over'));
   el(s,'text',{x:34,y:228,'font-size':8,fill:'var(--tx)'},'P under '+c.pU);
-  el(s,'text',{x:118,y:186,'font-size':8,fill:'var(--tx)'},'P over '+c.pO);
-  // toggles in de tekening: Fail naast de actuator, Flow bij de body (tik = wisselen)
-  const tg=(x,y,w,h,lab,id,a,b)=>{const v=$(id).value===a?a:b,g=el(s,'g',{style:'cursor:pointer'});
-    el(g,'text',{x:x+w/2,y:y-4,'text-anchor':'middle','font-size':10,fill:'var(--mu)'},lab);
-    el(g,'rect',{x,y,width:w,height:h,rx:8,fill:'var(--bg)',stroke:'var(--bd)'});
-    el(g,'text',{x:x+w/2,y:y+h/2+6,'text-anchor':'middle','font-size':17,'font-weight':400,fill:'var(--tx)'},v[0].toUpperCase()+v.slice(1));
-    g.addEventListener('click',()=>{$(id).value=$(id).value===a?b:a;update()})};
-  tg(-68,20,64,52,'Fail','fail','open','close');tg(-68,168,64,70,'Flow','flow','over','under');
+  el(s,'text',{x:38,y:192,'font-size':8,fill:'var(--tx)'},'P over '+c.pO);
 }
 
 function circles(c){
-  const d=dia(),dP=d.p,dS=d.s,dT=d.t,sc=190/Math.max(dP,1);
+  const d=dia(),dP=d.p,dS=d.s,dT=d.t,sc=158/Math.max(dP,1);
   const pu=c.under?'var(--hi)':'var(--lo)', pu4=c.under?'var(--hi4)':'var(--lo4)', po4=c.under?'var(--lo4)':'var(--hi4)';
   const t=$('top'),b=$('bot');t.innerHTML='';b.innerHTML='';
   el(t,'circle',{cx:100,cy:100,r:dP/2*sc,fill:'var(--lg)',stroke:'var(--tx)'});
@@ -205,13 +223,17 @@ function circles(c){
 }
 
 let flip=false,lastFail='';
-function chart(c){
-  const s=$('chart'),W=s.clientWidth||380,H=s.clientHeight||200;
+function wf(s,c,W,H,mini){ // waterfall; mini = kleine overlay op de xy-grafiek (scherm 2)
+  const fs=mini?7:11,gid='gsd'+(mini?'m':'');
   s.innerHTML='';s.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  // dP·Seat-gradiënt: upstream (roze) naar downstream (blauw); bij Under zit upstream onder, bij Over boven
+  const lg=el(el(s,'defs',{}),'linearGradient',{id:gid,x1:0,y1:0,x2:0,y2:1});
+  el(lg,'stop',{offset:'0%',style:'stop-color:'+(c.under?'var(--lo4)':'var(--hi4)')});
+  el(lg,'stop',{offset:'100%',style:'stop-color:'+(c.under?'var(--hi4)':'var(--lo4)')});
   const f=c.F,fr=N('fric');
   const sd=$('fail').value==='open'?1:-1;
   if(lastFail!==$('fail').value){flip=false;lastFail=$('fail').value}
-  const dir=flip?-sd:sd;$('dir').textContent='\u21c4 '+(dir>0?'Sluiten':'Openen');
+  const dir=flip?-sd:sd;
   const steps=[['Spring',f.spring],['Frict',-dir*fr],['P\u00b7Stem',f.stem],['dP\u00b7Seat',f.seat]];
   let cum=0;const bars=steps.map(([n,v])=>{const a=cum;cum+=v;return {n,v,a,b:cum}});
   bars.push({n:'Net',v:cum,a:0,b:cum,net:true});
@@ -219,41 +241,43 @@ function chart(c){
   const lines=[[.5,'#2e9b57'],[.3,'#e6b800'],[.1,'#f08a1c'],[0,'var(--tx)']];
   const nc=sfv>=.5?lines[0][1]:sfv>=.3?lines[1][1]:sfv>=.1?lines[2][1]:'#d9382e';
   const lv=bars.flatMap(b=>[b.a,b.b]).concat(0),hi=Math.max(...lv),lo=Math.min(...lv),rng=(hi-lo)||1;
-  const top=34,bot=H-20,y=v=>top+(hi-v)/rng*(bot-top);
+  const top=mini?8:34,bot=H-(mini?11:20),y=v=>top+(hi-v)/rng*(bot-top);
   const m=6,slot=(W-2*m)/bars.length,bw=slot*0.7;
-  el(s,'text',{x:m,y:14,'font-size':12,'font-weight':600,fill:'var(--tx)'},(dir>0?'Openen':'Sluiten')+(dir===sd?' (veer)':'')+' \u00b7 kN');
-  el(s,'text',{x:124,y:16,'text-anchor':'start','font-size':15,'font-weight':700,fill:'var(--tx)'},'Safety Factor '+(f.spring?(Math.round(cum/f.spring*100)+100)+'%':'\u221e'));
+  if(!mini)el(s,'text',{x:m,y:14,'font-size':12,'font-weight':600,fill:'var(--tx)'},(dir>0?'Opening':'Closing')+(dir===sd?' (spring)':'')+' \u00b7 kN');
+  if(!mini)el(s,'text',{x:142,y:16,'text-anchor':'start','font-size':15,'font-weight':700,fill:'var(--tx)'},'Safety Factor '+(f.spring?(Math.round(cum/f.spring*100)+100)+'%':'\u221e'));
   el(s,'line',{x1:m,x2:W-m,y1:y(0),y2:y(0),stroke:'var(--mu)'});
   bars.forEach((b,i)=>{
     const x=m+i*slot+(slot-bw)/2,yt=y(Math.max(b.a,b.b)),ht=Math.max(Math.abs(y(b.a)-y(b.b)),1);
-    el(s,'rect',{x,y:yt,width:bw,height:ht,fill:b.net?nc:(b.v>=0?'var(--pos)':'var(--neg)'),opacity:b.net?.75:.9});
+    el(s,'rect',{x,y:yt,width:bw,height:ht,fill:b.net?nc:i===2?(c.under?'var(--hi)':'var(--lo)'):i===3?'url(#'+gid+')':(b.v>=0?'var(--pos)':'var(--neg)'),opacity:b.net?.75:.9});
     if(Math.abs(b.v)>1e-9){const len=Math.abs(y(b.b)-y(b.a));arrow(s,x+bw/2,y(b.a),x+bw/2,y(b.b),'#000',1.2,Math.min(6,len*0.6),Math.min(3,len*0.3))}
-    el(s,'text',{x:x+bw/2,y:yt-4,'text-anchor':'middle','font-size':11,fill:'var(--tx)'},b.v.toFixed(2));
-    el(s,'text',{x:x+bw/2,y:H-5,'text-anchor':'middle','font-size':11,fill:'var(--mu)'},b.n);
+    el(s,'text',{x:x+bw/2,y:yt-4,'text-anchor':'middle','font-size':fs,fill:'var(--tx)'},b.v.toFixed(2));
+    el(s,'text',{x:x+bw/2,y:H-(mini?2:5),'text-anchor':'middle','font-size':fs,fill:'var(--mu)'},b.n);
     if(i<bars.length-1)el(s,'line',{x1:x+bw,x2:x+slot,y1:y(b.b),y2:y(b.b),stroke:'var(--mu)','stroke-dasharray':'2 2'});
   });
-  if(sp)lines.forEach(([p,col],k)=>{const yy=y(sp*p),pw=36,x0=W-m-pw-(k%2?pw+4:0);el(s,'line',{x1:m,x2:W-m,y1:yy,y2:yy,stroke:col,'stroke-width':1.5,'stroke-dasharray':'5 3'});el(s,'rect',{x:x0,y:yy-7,width:pw,height:14,rx:4,fill:col});el(s,'text',{x:x0+pw/2,y:yy+4,'text-anchor':'middle','font-size':11,'font-weight':700,fill:p===0?'var(--bg)':'#000'},(Math.round(p*100)+100)+'%')});
+  if(sp)lines.forEach(([p,col],k)=>{const yy=y(sp*p),pw=mini?22:36,ph=mini?10:14,x0=W-m-pw-(k%2?pw+3:0);el(s,'line',{x1:m,x2:W-m,y1:yy,y2:yy,stroke:col,'stroke-width':1.5,'stroke-dasharray':'5 3'});el(s,'rect',{x:x0,y:yy-ph/2,width:pw,height:ph,rx:3,fill:col});el(s,'text',{x:x0+pw/2,y:yy+(mini?2.7:4),'text-anchor':'middle','font-size':mini?7:11,'font-weight':700,fill:p===0?'var(--bg)':'#000'},(Math.round(p*100)+100)+'%')});
 }
-function update(){if(!preset)op={i:N('pin'),o:N('pout')};$('bop').textContent='Op '+op.i+'→'+op.o;const c=calc();sketch(c);circles(c);chart(c)}
+function chart(c){const s=$('chart');wf(s,c,s.clientWidth||380,s.clientHeight||200,false)}
+function update(){if(!preset)op={i:N('pin'),o:N('pout')};$('bop').textContent='Op '+Math.round(op.i)+'→'+Math.round(op.o);const c=calc();syncMast();sketch(c);circles(c);chart(c);lbl();trend(c)}
+// plug-slider niet-lineair (kwadratisch): fijne stappen bij kleine maten; waarde in achtsten inch (3..64)
+$('plugs').addEventListener('input',()=>{$('plug').value=Math.round(3+61*($('plugs').value/1000)**2)});
 document.querySelectorAll('input,select').forEach(e=>e.addEventListener('input',update));
-$('dir').onclick=()=>{flip=!flip;update()};
 function sym(id,min,max){ // symmetrische slider: balkbreedte = % van plug (track = plug)
   const inp=$(id),t=$(id+'T');
-  const set=e=>{const r=t.getBoundingClientRect(),w=Math.abs(e.clientX-(r.left+r.width/2))*2/r.width*100;inp.value=Math.round(Math.min(max,Math.max(min,w)));update()};
+  const set=e=>{const r=t.getBoundingClientRect(),w=Math.abs(e.clientX-(r.left+r.width/2))*2/r.width*100;inp.value=Math.round(Math.min(max,Math.max(min,w))*10)/10;update()};
   t.addEventListener('pointerdown',e=>{t.setPointerCapture(e.pointerId);set(e)});
   t.addEventListener('pointermove',e=>{if(t.hasPointerCapture(e.pointerId))set(e)});
 }
 sym('stem',5,95);sym('seat',75,99);dual();
 function dual(){ // 1 slider met 2 handles: P in (rood) en P out (blauw), max = P max shut off
   const t=$('pT');let act=null;
-  const val=e=>{const r=t.getBoundingClientRect(),w=frozen||win();return Math.round(Math.min(w.pm,Math.max(0,gi(Math.min(1,Math.max(0,(e.clientX-r.left-22)/(r.width-44))),w))))};
+  const val=e=>{const r=t.getBoundingClientRect(),w=frozen||win();return Math.round(Math.min(w.pm,Math.max(0,gi(Math.min(1,Math.max(0,(e.clientX-r.left-22)/(r.width-44))),w)))*10)/10};
   const set=e=>{$(act).value=val(e);preset=false;update()};
   t.addEventListener('pointerdown',e=>{frozen=win();const v=val(e),a=Math.abs(v-N('pin')),b=Math.abs(v-N('pout'));act=a<b?'pin':b<a?'pout':(v>N('pin')?'pin':'pout');t.setPointerCapture(e.pointerId);set(e)});
   t.addEventListener('pointermove',e=>{if(t.hasPointerCapture(e.pointerId))set(e)});
 }
 let op={i:75,o:70},preset=false,frozen=null; // frozen = vaste schaal tijdens slepen
 // niet-lineaire druk-schaal: rond de duimen uitvergroot (70% van de track), rest samengedrukt
-function win(){const pm=Math.max(Math.round(N('pmax')),1),lo=Math.min(N('pin'),N('pout')),hi=Math.max(N('pin'),N('pout')),pad=Math.max(5,(hi-lo)*.25),a=Math.max(0,lo-pad),b=Math.min(pm,hi+pad);return{pm,a,b,sa:a>0?.15:0,sb:b<pm?.85:1}}
+function win(){const pm=Math.max(N('pmax'),1),lo=Math.min(N('pin'),N('pout')),hi=Math.max(N('pin'),N('pout')),pad=Math.max(5,(hi-lo)*.25),a=Math.max(0,lo-pad),b=Math.min(pm,hi+pad);return{pm,a,b,sa:a>0?.15:0,sb:b<pm?.85:1}}
 function g(p,w){if(p<=w.a)return w.a>0?p/w.a*w.sa:0;if(p>=w.b)return w.b<w.pm?w.sb+(p-w.b)/(w.pm-w.b)*(1-w.sb):1;return w.sa+(p-w.a)/(w.b-w.a)*(w.sb-w.sa)}
 function gi(x,w){if(x<=w.sa)return w.sa>0?x/w.sa*w.a:0;if(x>=w.sb)return w.sb<1?w.b+(x-w.sb)/(1-w.sb)*(w.pm-w.b):w.pm;return w.a+(x-w.sa)/(w.sb-w.sa)*(w.b-w.a)}
 ['pointerup','pointercancel'].forEach(ev=>$('pT').addEventListener(ev,()=>{frozen=null;update()}));
@@ -275,10 +299,64 @@ let ffrozen=null;const FM=5;
   t.addEventListener('pointermove',e=>{if(ffrozen&&t.hasPointerCapture(e.pointerId)){$('fric').value=val(e);update()}});
   ['pointerup','pointercancel'].forEach(ev=>t.addEventListener(ev,()=>{ffrozen=null;update()}));
 })();
-const inc=document.querySelector('.in'),PM=()=>Math.max(Math.round(N('pmax')),0);
+const inc=document.querySelector('.in'),PM=()=>Math.max(N('pmax'),0);
 const PR={op:()=>[op.i,op.o],maxin:()=>[PM(),0],maxout:()=>[0,PM()],z0:()=>[0,0],zm:()=>[PM(),PM()]};
 document.querySelectorAll('.btns button').forEach(b=>b.onclick=()=>{const[i,o]=PR[b.dataset.c]();$('pin').value=i;$('pout').value=o;preset=true;update()});
+// scherm 2: P[in] (x) tegen P[out] (y), kleur = safety factor in de gekozen richting
+let TG=null,TGm=null;
+function xy(cv,W,H,mini){ // P[in] (x) tegen P[out] (y); mini = kleine overlay op de waterfall
+  const dpr=window.devicePixelRatio||1;
+  cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
+  const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);
+  const tx=getComputedStyle(document.body).color;
+  const ml=mini?19:46,mb=mini?12:36,mt=mini?11:12,mr=mini?8:14,S=Math.max(30,Math.min(W-ml-mr,H-mt-mb)),x0=ml+Math.max(0,(W-ml-mr-S)/2),y0=mt+Math.max(0,(H-mt-mb-S)/2),pm=Math.max(N('pmax'),1);
+  const p=pmm(),As=Math.PI/4*(p*N('seat')/100)**2,Ast=Math.PI/4*(p*N('stem')/100)**2,k=1e-4;
+  const un=$('flow').value==='under',sd=$('fail').value==='open'?1:-1,dir=flip?-sd:sd,sp=sd*N('spring'),fr=N('fric'),n=mini?24:40,cell=S/n;
+  for(let i=0;i<n;i++)for(let j=0;j<n;j++){
+    const pin=(i+.5)/n*pm,pout=(j+.5)/n*pm,dP=Math.abs(pin-pout);
+    const net=sp-dir*fr+(un?pin:pout)*Ast*k+(un?1:-1)*dP*As*k,sf=sp?net/sp:-1;
+    g.fillStyle=sf>=.5?'rgb(140,200,163)':sf>=.3?'rgb(241,216,115)':sf>=.1?'rgb(247,191,130)':'rgb(234,146,140)';
+    g.fillRect(x0+i*cell,y0+S-(j+1)*cell,cell+.6,cell+.6);
+  }
+  g.strokeStyle=tx;g.fillStyle=tx;g.lineWidth=mini?1:1.5;g.strokeRect(x0,y0,S,S);
+  g.setLineDash([5,4]);g.lineWidth=1;g.beginPath();g.moveTo(x0,y0+S);g.lineTo(x0+S,y0);g.stroke();g.setLineDash([]);
+  g.font=(mini?8:11)+'px system-ui,sans-serif';const dg=pm%1?1:0;
+  (mini?[0,1]:[0,.5,1]).forEach(f=>{g.textAlign='center';g.fillText((f*pm).toFixed(dg),x0+f*S,y0+S+(mini?9:14));g.textAlign='right';g.fillText((f*pm).toFixed(dg),x0-(mini?3:5),y0+S-f*S+(mini?3:4))});
+  g.textAlign='center';g.font=(mini?8:12)+'px system-ui,sans-serif';g.fillText(mini?'P in':'P in [bar]',x0+S/2,y0+S+(mini?9:30));
+  if(mini){g.textAlign='left';g.fillText('P out',2,8)}else{g.save();g.translate(14,y0+S/2);g.rotate(-Math.PI/2);g.fillText('P out [bar]',0,0);g.restore()}
+  const px=x0+N('pin')/pm*S,py=y0+S-N('pout')/pm*S;
+  g.setLineDash([3,3]);g.beginPath();g.moveTo(px,y0+S);g.lineTo(px,py);g.lineTo(x0,py);g.stroke();g.setLineDash([]);
+  g.beginPath();g.arc(px,py,mini?3.5:6,0,7);g.fill();g.strokeStyle='#fff';g.lineWidth=mini?1.2:2;g.stroke();
+  g.font='bold '+(mini?7.5:13)+'px system-ui,sans-serif';g.fillStyle=tx;g.textAlign='left';g.fillText('Reverse Flow',x0+(mini?3:7),y0+(mini?9:18));g.textAlign='right';g.fillText('Normal Flow',x0+S-(mini?3:7),y0+S-(mini?4:8));
+  if(!mini){const r=px>x0+S*.6;g.textAlign=r?'right':'left';g.font='bold 12px system-ui,sans-serif';g.fillText(N('pin').toFixed(1)+' / '+N('pout').toFixed(1),px+(r?-10:10),py-10)}
+  return {x0,y0,S,pm};
+}
+function trend(c){
+  if(document.body.classList.contains('s2')){const w=$('tw');TG=xy($('tc'),w.clientWidth,w.clientHeight,false);
+    // waterfall-overlay op de xy-grafiek: linksboven, of rechtsonder als de stip daar zit
+    const sm=$('mw'),MW=170,MH=118,dx=TG.x0+N('pin')/TG.pm*TG.S,dy=TG.y0+TG.S-N('pout')/TG.pm*TG.S,ax=TG.x0+8,ay=TG.y0+24;
+    const inA=dx>ax-12&&dx<ax+MW+12&&dy>ay-12&&dy<ay+MH+12;
+    wf(sm,c,MW,MH,true);
+    sm.style.cssText=`width:${MW}px;height:${MH}px;left:${inA?TG.x0+TG.S-MW-8:ax}px;top:${inA?TG.y0+TG.S-MH-24:ay}px`}
+  else TGm=xy($('mc'),112,112,true);
+}
+function tset(e,cv,T){if(!T)return;const r=cv.getBoundingClientRect(),cl=v=>Math.round(Math.min(1,Math.max(0,v))*T.pm*10)/10;
+  $('pin').value=cl((e.clientX-r.left-T.x0)/T.S);$('pout').value=cl(1-(e.clientY-r.top-T.y0)/T.S);preset=false;update()}
+[['tc',()=>TG],['mc',()=>TGm]].forEach(([id,gt])=>{const cv=$(id);
+  cv.addEventListener('pointerdown',e=>{cv.setPointerCapture(e.pointerId);tset(e,cv,gt())});
+  cv.addEventListener('pointermove',e=>{if(cv.hasPointerCapture(e.pointerId))tset(e,cv,gt())})});
+// 3 knoppen (scherm 1 en 2): Flow, Fail en richting van de grafiek (Openen/Sluiten)
+function lbl(){const sd=$('fail').value==='open'?1:-1,dir=flip?-sd:sd;
+  document.querySelectorAll('.b3 button').forEach(b=>{const k=b.dataset.k;b.textContent=k==='trend'?'Trend: '+(document.body.classList.contains('s2')?'Pressure':'Force'):k==='flow'?'Flow: '+($('flow').value==='over'?'Over':'Under'):k==='fail'?'Fail: '+($('fail').value==='open'?'Open':'Close'):(dir>0?'Opening':'Closing')})}
+document.querySelectorAll('.b3 button').forEach(b=>b.onclick=()=>{const k=b.dataset.k;
+  if(k==='trend')document.body.classList.toggle('s2');else if(k==='flow')$('flow').value=$('flow').value==='over'?'under':'over';else if(k==='fail')$('fail').value=$('fail').value==='open'?'close':'open';else flip=!flip;update()});
+let lastSp=null; // MAST volgt 150% van de springkracht zodra de spring verandert; daarna handmatig aan te passen
+function syncMast(){const s=N('spring');if(lastSp===null||s!==lastSp)$('mast').value=(1.5*s).toFixed(1);lastSp=s}
 window.addEventListener('resize',update);
+// plug: mm (stap 0,1) of inch (stappen van 1/8 inch); intern altijd mm
+let pUnit='in'; // plug in stappen van 1/8 inch, mm wordt ernaast getoond
+function pmm(){return pUnit==='in'?N('plug')*25.4/8:N('plug')}
+function fr8(n){const w=Math.floor(n/8),r=n%8;if(!r)return w;const g=r%4===0?4:r%2===0?2:1;return (w?w+' ':'')+(r/g)+'/'+(8/g)}
 
 update();
 </script></body></html>
