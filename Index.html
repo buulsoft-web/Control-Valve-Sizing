@@ -84,18 +84,41 @@ body.s2 .mid,body.s2 .ch,body.s2>.b3{display:none}
 .tl{display:flex;gap:10px;font-size:11px;color:var(--mu);justify-content:center;flex-wrap:wrap}
 .tl i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
 /* pc-indeling: invoer en waterfall links, klep + cirkels en xy-plot rechts; niet full width */
-body.wide{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:430px 1fr;grid-template-rows:auto auto auto auto 1fr;gap:6px;padding:8px;height:min(100vh,980px);border:1px solid var(--bd);border-radius:14px}
+body.wide{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:430px 1fr;grid-template-rows:auto auto auto auto auto 1fr;gap:6px;padding:8px;height:min(100vh,980px);border:1px solid var(--bd);border-radius:14px}
 body.wide .tb{grid-column:1/-1}
-body.wide .in{grid-column:1;grid-row:2}
-body.wide #pc{grid-column:1;grid-row:3}
-body.wide .b3{grid-column:1;grid-row:4;grid-template-columns:repeat(3,1fr)}
-body.wide .mid{grid-column:2;grid-row:2/5;min-height:0;contain:size}
-body.wide .ch{grid-column:1;grid-row:5;height:auto;min-height:0}
-body.wide .v2{grid-column:2;grid-row:5;display:flex;min-height:0}
+body.wide .sel{grid-column:1;grid-row:2}
+body.wide .in{grid-column:1;grid-row:3}
+body.wide #pc{grid-column:1;grid-row:4}
+body.wide .b3{grid-column:1;grid-row:5;grid-template-columns:repeat(3,1fr)}
+body.wide .mid{grid-column:2;grid-row:2/6;min-height:0;contain:size}
+body.wide .ch{grid-column:1;grid-row:6;height:auto;min-height:0}
+body.wide .v2{grid-column:2;grid-row:6;display:flex;min-height:0}
 body.s2{padding-left:2px;padding-right:2px}
 body.wide .vt,body.wide #mc,body.wide #mw,body.wide .b3 button[data-k=trend]{display:none}
+/* selectie-vak: size / class / stem material (3 listboxen op 1 regel) */
+.sel{display:grid;grid-template-columns:.8fr 1fr 1.3fr;gap:4px}
+.sel label{display:flex;flex-direction:column;min-width:0}
+.sel small{font-size:9px;color:var(--mu);white-space:nowrap}
+.sel select{width:100%;min-width:0;box-sizing:border-box;font:inherit;font-size:14px;padding:6px 3px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--tx)}
+/* info-knop en popup */
+.sk{position:relative}
+.ib{position:absolute;top:3px;right:3px;z-index:3;font-size:11px;padding:3px 9px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
+#pop{display:none;position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.45);align-items:center;justify-content:center;padding:12px;box-sizing:border-box}
+#pop.on{display:flex}
+#pop .box{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:10px;padding:10px;max-width:520px;width:100%;max-height:100%;overflow:auto;box-sizing:border-box}
+#pop .hd{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:700}
+#pop .hd button{font-size:16px;line-height:1;padding:4px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
+#pop h4{margin:8px 0 0;font-size:12px}
+.pt{border-collapse:collapse;width:100%;font-size:11px;text-align:center;margin:4px 0 6px}
+.pt th,.pt td{border:1px solid var(--bd);padding:3px 2px}
+.pt th{background:var(--bg);color:var(--mu);font-weight:600}
+.pt th.hl{color:var(--tx);background:color-mix(in srgb,var(--tx) 18%,var(--bg))}
+.pt td.hl,.pt tr.hl td{background:var(--tx);color:var(--bg);font-weight:700}
+#pres{font-size:12px;font-weight:600}
 </style></head><body>
 <div class="tb"><span>Globe valve Forces Visualized</span><span>by BuulSoft '26</span></div>
+
+<div class="card sel"><label><small>Size</small><select id="vsize"><option value="1">1"</option><option value="1.5">1½"</option><option value="2">2"</option><option value="3">3"</option><option value="4" selected>4"</option><option value="6">6"</option><option value="8">8"</option><option value="10">10"</option><option value="12">12"</option><option value="16">16"</option><option value="20">20"</option><option value="24">24"</option><option value="30">30"</option></select></label><label><small>Class</small><select id="vcls"><option value="150">#150</option><option value="300">#300</option><option value="600" selected>#600</option><option value="900">#900</option><option value="1500">#1500</option><option value="2500">#2500</option></select></label><label><small>Stem material</small><select id="vmat"><option value="316SS" selected>316SS</option><option value="410SS">410SS</option><option value="Nitronic 50">Nitronic 50</option><option value="17-4PH H900">17-4PH H900</option></select></label></div>
 
 <div class="card in">
 <div class="r">
@@ -114,13 +137,13 @@ body.wide .vt,body.wide #mc,body.wide #mw,body.wide .b3 button[data-k=trend]{dis
 </div>
 </div>
 <div class="card" id="pc">
-<div class="sr p q"><div class="fr"><small>F[spring]</small><div class="dual" id="sT"><div class="th" id="sth"></div></div></div><div class="fr"><small>F[friction]</small><div class="dual" id="fT"><div class="th" id="fth"></div></div><input id="fric" type="hidden" value="1"></div><label class="f">MAST<input id="mast" type="number" step="0.1" value="12.5" title="Follows 250% of spring force when the spring changes; can be edited"><span>[kN]</span></label><input id="spring" type="hidden" value="5"></div>
+<div class="sr p q"><div class="fr"><small>F[spring]</small><div class="dual" id="sT"><div class="th" id="sth"></div></div></div><div class="fr"><small>F[friction]</small><div class="dual" id="fT"><div class="th" id="fth"></div></div><input id="fric" type="hidden" value="1"></div><label class="f">MAST<input id="mast" type="number" step="0.1" value="65" title="Filled from the Info tables (base x material factor) when Size/Class/Stem material changes; can be edited"><span>[kN]</span></label><input id="spring" type="hidden" value="5"></div>
 <div class="sr p r2"><div class="fr"><small>Process [bar]</small><div class="dual" id="pT"><div class="seg"></div><div class="th" id="thin"></div><div class="th" id="thout"></div></div></div><label class="fc"><small>Max Operating</small><input id="pmaxop" type="number" value="100" step="0.1" inputmode="decimal"></label><label class="fc"><small>Max Shut Off</small><input id="pmax" type="number" value="135" step="0.1" inputmode="decimal"></label><input id="pin" type="hidden" value="75"><input id="pout" type="hidden" value="70"></div>
 <div class="btns"><button data-c="op" id="bop"></button><button data-c="maxin">Max in</button><button data-c="maxout">Max out</button><button data-c="z0">0 dP @0</button><button data-c="zm">0 dP @Max</button></div>
 </div>
 
 <div class="mid">
-<div class="card sk"><input id="flow" type="hidden" value="over"><input id="fail" type="hidden" value="close"><div class="pv"><span>100%</span><input id="pos" type="range" min="0" max="100" value="0" disabled title="Valve position (0% only for now)"><span>0%</span></div><div class="pv"><span id="supplyv"></span><input id="supplys" type="range" min="0" max="1000" step="1" value="452" title="Actuator air pressure (0-6 bar)"><input id="supply" type="hidden" value="4.2"><span>0</span></div><svg id="sketch" viewBox="0 0 200 264"></svg></div>
+<div class="card sk"><button class="ib" id="infob">Info</button><input id="flow" type="hidden" value="over"><input id="fail" type="hidden" value="close"><div class="pv"><span>100%</span><input id="pos" type="range" min="0" max="100" value="0" disabled title="Valve position (0% only for now)"><span>0%</span></div><div class="pv"><span id="supplyv"></span><input id="supplys" type="range" min="0" max="1000" step="1" value="452" title="Actuator air pressure (0-6 bar)"><input id="supply" type="hidden" value="4.2"><span>0</span></div><svg id="sketch" viewBox="0 0 200 264"></svg></div>
 <div class="cc">
 <div class="card"><i class="lb">Top view</i><svg id="top" viewBox="4 4 192 192"></svg></div>
 <div class="card"><i class="lb">Bottom view</i><svg id="bot" viewBox="4 4 192 192"></svg></div>
@@ -131,6 +154,8 @@ body.wide .vt,body.wide #mc,body.wide #mw,body.wide .b3 button[data-k=trend]{dis
 <div class="card ch"><svg id="chart"></svg><canvas id="mc"></canvas></div>
 <div class="card v2"><div class="vt b3"><button data-k="trend"></button><button data-k="flow"></button><button data-k="fail"></button><button data-k="dir"></button></div><div id="tw"><canvas id="tc"></canvas><svg id="mw"></svg></div>
 <div class="tl"><span><i style="background:#2e9b57"></i>SF &gt; 150%</span><span><i style="background:#e6b800"></i>130-150%</span><span><i style="background:#f08a1c"></i>110-130%</span><span><i style="background:#d9382e"></i>&lt; 110%</span><span><i style="background:#7a1010"></i>negative</span><span><i style="background:#8e4fc2"></i>&gt; MAST</span></div></div>
+
+<div id="pop"><div class="box"><div class="hd"><span>Info</span><button id="popx">×</button></div><h4>Table 1 – base MAST [kN]</h4><div id="t1"></div><h4>Table 2 – relative MAST per stem material</h4><div id="t2"></div><div id="pres"></div></div></div>
 
 <script>
 const $=id=>document.getElementById(id), N=id=>parseFloat($(id).value)||0;
@@ -273,7 +298,7 @@ function wf(s,c,W,H,mini){ // waterfall; mini = kleine overlay op de xy-grafiek 
   if(mastOn){const yy=y(Math.sign(cum||1)*mast),pw=mini?26:44,ph=mini?10:14;el(s,'line',{x1:m,x2:W-m,y1:yy,y2:yy,stroke:'#8e4fc2','stroke-width':1.5,'stroke-dasharray':'2 3'});el(s,'rect',{x:lp+2,y:yy-ph/2,width:pw,height:ph,rx:3,fill:'#8e4fc2'});el(s,'text',{x:lp+2+pw/2,y:yy+(mini?2.7:4),'text-anchor':'middle','font-size':mini?7:11,'font-weight':700,fill:'#fff'},'MAST')}
 }
 function chart(c){const s=$('chart');wf(s,c,s.clientWidth||380,s.clientHeight||200,false)}
-function update(){if(!preset)op={i:N('pin'),o:N('pout')};$('bop').textContent='Op '+Math.round(op.i)+'→'+Math.round(op.o);const c=calc();syncMast();sketch(c);circles(c);chart(c);lbl();trend(c)}
+function update(){if(!preset)op={i:N('pin'),o:N('pout')};$('bop').textContent='Op '+Math.round(op.i)+'→'+Math.round(op.o);const c=calc();sketch(c);circles(c);chart(c);lbl();trend(c)}
 // plug-slider niet-lineair (kwadratisch): fijne stappen bij kleine maten; waarde in achtsten inch (3..64)
 $('plugs').addEventListener('input',()=>{$('plug').value=Math.round(3+61*($('plugs').value/1000)**2)});
 // actuator-luchtdruk 0-6 bar, verticaal en niet-lineair: fijnere stappen bij hoge druk
@@ -390,8 +415,6 @@ function lbl(){const sd=$('fail').value==='open'?1:-1,dir=flip?-sd:sd;
   document.querySelectorAll('.b3 button').forEach(b=>{const k=b.dataset.k;b.textContent=k==='trend'?'Trend: '+(document.body.classList.contains('s2')?'Pressure':'Force'):k==='flow'?'Flow: '+($('flow').value==='over'?'Over':'Under'):k==='fail'?'Fail: '+($('fail').value==='open'?'Open':'Close'):(dir>0?'Opening':'Closing')})}
 document.querySelectorAll('.b3 button').forEach(b=>b.onclick=()=>{const k=b.dataset.k;
   if(k==='trend')document.body.classList.toggle('s2');else if(k==='flow')$('flow').value=$('flow').value==='over'?'under':'over';else if(k==='fail')$('fail').value=$('fail').value==='open'?'close':'open';else flip=!flip;update()});
-let lastSp=null; // MAST volgt 250% van de springkracht zodra de spring verandert; daarna handmatig aan te passen
-function syncMast(){const s=N('spring');if(lastSp===null||s!==lastSp)$('mast').value=(2.5*s).toFixed(1);lastSp=s}
 // pc-indeling aan/uit op schermgrootte
 const mq=window.matchMedia('(min-width:1000px) and (min-height:600px)');
 function wide(u){document.body.classList.toggle('wide',mq.matches);if(mq.matches)document.body.classList.remove('s2');if(u)update()}
@@ -401,6 +424,23 @@ window.addEventListener('resize',update);
 let pUnit='in'; // plug in stappen van 1/8 inch, mm wordt ernaast getoond
 function pmm(){return pUnit==='in'?N('plug')*25.4/8:N('plug')}
 function fr8(n){const w=Math.floor(n/8),r=n%8;if(!r)return w;const g=r%4===0?4:r%2===0?2:1;return (w?w+' ':'')+(r/g)+'/'+(8/g)}
+
+// selectie-vak + MAST uit tabellen: MAST [kN] = tabel 1 (size x class) x relatieve factor stem material (tabel 2); veld blijft handmatig aan te passen
+const MC=['150','300','600','900','1500','2500'];
+const MT=[['1','1"',[10,12,15,18,22,28]],['1.5','1\u00bd"',[15,18,22,26,32,40]],['2','2"',[20,25,30,35,45,55]],['3','3"',[30,35,45,55,70,90]],['4','4"',[40,50,65,80,100,125]],['6','6"',[60,80,100,120,150,190]],['8','8"',[90,120,150,185,230,300]],['10','10"',[120,160,210,260,330,420]],['12','12"',[160,220,280,350,450,550]],['16','16"',[240,320,420,520,650,850]],['20','20"',[350,470,600,780,950,1200]],['24','24"',[480,650,850,1050,1300,1650]],['30','30"',[700,950,1250,1550,1900,2400]]];
+const MF=[['316SS',1],['410SS',1.4],['Nitronic 50',1.7],['17-4PH H900',2.5]];
+const VS={};
+function mastVal(){const r=MT.find(x=>x[0]===VS.size),ci=MC.indexOf(VS.cls),f=MF.find(x=>x[0]===VS.mat);return{r,ci,f,base:r[2][ci],mast:+(r[2][ci]*f[1]).toFixed(1)}}
+function setMast(){$('mast').value=mastVal().mast}
+function renderInfo(){const m=mastVal();
+  $('t1').innerHTML='<table class="pt"><tr><th>Size</th>'+MC.map((c,i)=>'<th'+(i===m.ci?' class="hl"':'')+'>#'+c+'</th>').join('')+'</tr>'+MT.map(r=>'<tr><th'+(r===m.r?' class="hl"':'')+'>'+r[1]+'</th>'+r[2].map((v,i)=>'<td'+(r===m.r&&i===m.ci?' class="hl"':'')+'>'+v+' kN</td>').join('')+'</tr>').join('')+'</table>';
+  $('t2').innerHTML='<table class="pt"><tr><th>Stem material</th><th>Relative MAST</th></tr>'+MF.map(f=>'<tr'+(f===m.f?' class="hl"':'')+'><td>'+f[0]+'</td><td>'+f[1]+'</td></tr>').join('')+'</table>';
+  $('pres').textContent=m.r[1]+' #'+VS.cls+' '+VS.mat+': '+m.base+' kN \u00d7 '+m.f[1]+' = '+m.mast+' kN MAST'}
+[['vsize','size'],['vcls','cls'],['vmat','mat']].forEach(([id,k])=>{VS[k]=$(id).value;$(id).addEventListener('input',()=>{VS[k]=$(id).value;setMast();renderInfo();update()})});
+setMast();renderInfo();
+$('infob').onclick=()=>{renderInfo();$('pop').classList.add('on')};
+$('popx').onclick=()=>$('pop').classList.remove('on');
+$('pop').addEventListener('click',e=>{if(e.target===$('pop'))$('pop').classList.remove('on')});
 
 update();
 </script></body></html>
