@@ -302,8 +302,11 @@ function wf(s,c,W,H,mini){ // waterfall; mini = kleine overlay op de xy-grafiek 
   const drawBar=(b,i)=>{
     const x=lp+i*slot+(slot-bw)/2,yt=y(Math.max(b.a,b.b)),ht=Math.max(Math.abs(y(b.a)-y(b.b)),1);
     if(b.ia){const lo_=Math.min(b.a,b.b),hi_=Math.max(b.a,b.b);
-      if(hi_>0)el(s,'rect',{x,y:y(hi_),width:bw,height:Math.max(y(Math.max(lo_,0))-y(hi_),0),fill:'#4a90d9',opacity:.9});
-      if(lo_<0){const t0=y(Math.min(hi_,0));el(s,'rect',{x,y:t0,width:bw,height:Math.max(y(lo_)-t0,0),fill:'url(#'+hid+')',stroke:'#4a90d9','stroke-width':1})}
+      // onvoldoende lucht = Fail Close: onder nul, Fail Open: boven nul (gearceerd); andere kant effen blauw
+      const part=(ya,yb,hatch)=>{const t0=y(Math.max(ya,yb)),h0=Math.abs(y(ya)-y(yb));if(h0<=0)return;
+        el(s,'rect',hatch?{x,y:t0,width:bw,height:h0,fill:'url(#'+hid+')',stroke:'#4a90d9','stroke-width':1}:{x,y:t0,width:bw,height:h0,fill:'#4a90d9',opacity:.9})};
+      if(hi_>0)part(Math.max(lo_,0),hi_,sd>0);
+      if(lo_<0)part(lo_,Math.min(hi_,0),sd<0);
     }else el(s,'rect',{x,y:yt,width:bw,height:ht,fill:b.net?nc:b.ia?'#4a90d9':i===2?(c.under?'var(--hi)':'var(--lo)'):i===3?'url(#'+gid+')':(b.v>=0?'var(--pos)':'var(--neg)'),opacity:b.net?.75:.9});
     if(Math.abs(b.v)>1e-9){const len=Math.abs(y(b.b)-y(b.a));arrow(s,x+bw/2,y(b.a),x+bw/2,y(b.b),'#000',1.2,Math.min(6,len*0.6),Math.min(3,len*0.3))}
     el(s,'text',b.net?{x:x+bw/2,y:yt-4,'text-anchor':'middle','font-size':fs+(mini?2:4),'font-weight':700,fill:'var(--tx)',stroke:'var(--card)','stroke-width':3,'paint-order':'stroke'}:{x:x+bw/2,y:yt-4,'text-anchor':'middle','font-size':fs,fill:'var(--tx)'},b.v.toFixed(2));
@@ -393,7 +396,7 @@ function xy(cv,W,H,mini){ // P[in] (x) tegen P[out] (y); mini = kleine overlay o
   {const fia=fiaF(),mk=document.createElement('canvas');mk.width=nx;mk.height=ny;
     const mg=mk.getContext('2d'),mi=mg.createImageData(nx,ny),md=mi.data;let any=false;
     for(let i=0;i<nx;i++)for(let j=0;j<ny;j++){
-      if(netF((i+.5)/nx*pm,(j+.5)/ny*pm)-sd*fia<0){md[((ny-1-j)*nx+i)*4+3]=255;any=true}}
+      if(sd*(netF((i+.5)/nx*pm,(j+.5)/ny*pm)-sd*fia)>0){md[((ny-1-j)*nx+i)*4+3]=255;any=true}}
     if(any){mg.putImageData(mi,0,0);
       const hw=Math.max(1,Math.round(SX*dpr)),hh=Math.max(1,Math.round(SY*dpr)),hc=document.createElement('canvas');hc.width=hw;hc.height=hh;
       const hg=hc.getContext('2d');hg.imageSmoothingEnabled=false;hg.drawImage(mk,0,0,hw,hh);
