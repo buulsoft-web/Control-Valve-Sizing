@@ -10,7 +10,7 @@ html,body{height:100%;margin:0}
 .tb{display:flex;justify-content:space-between;align-items:baseline;padding:1px 6px;font-size:13px;font-weight:700;white-space:nowrap}
 .tb span:last-child{display:flex;gap:8px;align-items:center;font-size:11px;font-weight:400;color:var(--mu)}
 .tb .ub{padding:3px 8px;font-size:11px}
-body{background:var(--bg);color:var(--tx);font:12px system-ui,sans-serif;padding:4px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;overflow:hidden}
+body{background:var(--bg);color:var(--tx);font:12px system-ui,sans-serif;padding:4px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;overflow-x:hidden;overflow-y:auto}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:4px}
 .in{display:flex;flex-direction:column;gap:3px}
 .in .r:first-child{grid-template-columns:1fr}
@@ -51,7 +51,7 @@ input[type=range]{height:32px}
 .f{display:flex;align-items:center;gap:3px;color:var(--mu);font-size:11px;white-space:nowrap;min-width:0}
 .f input,.f select{flex:1;min-width:0;width:100%;font:inherit;font-size:14px;padding:6px 4px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--tx)}
 .f input[type=range]{padding:0}
-.mid{flex:1;min-height:0;display:flex;gap:4px}
+.mid{flex:1;min-height:150px;display:flex;gap:4px}
 .sk{flex:1.2;min-width:0;display:flex;flex-direction:row;gap:2px}
 .pv{position:relative;display:flex;flex-direction:column;align-items:center;width:30px;font-size:10px;color:var(--mu);padding:2px 0;white-space:nowrap}
 .pv input[type=range]{writing-mode:vertical-lr;direction:rtl;flex:1;height:auto;width:24px;margin:4px 0;min-height:0}
@@ -65,7 +65,7 @@ input[type=range]{height:32px}
 .cc .card{flex:1;min-height:0;position:relative;display:flex;flex-direction:column;padding:1px}
 .lb{position:absolute;left:5px;top:3px;z-index:1;font-style:normal;font-size:11px;color:var(--mu)}
 svg{width:100%;height:100%;min-height:0;display:block}
-.ch{position:relative;height:30%;min-height:110px;padding:0;overflow:hidden}
+.ch{position:relative;height:30%;min-height:150px;padding:0;overflow:hidden}
 @media(min-width:600px){ /* pc: telefoonverhouding, gecentreerd */
   html{background:color-mix(in srgb,var(--bg) 88%,#000)}
   body{max-width:calc(100vh*.46);margin:0 auto;border:1px solid var(--bd);border-radius:14px}
@@ -73,7 +73,7 @@ svg{width:100%;height:100%;min-height:0;display:block}
 .b3{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
 .b3 button{font-size:12px;min-height:34px;padding:2px;line-height:1.15;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx)}
 
-.v2{display:none;flex:1;min-height:0;flex-direction:column;gap:4px;padding:2px}
+.v2{display:none;flex:1;min-height:300px;flex-direction:column;gap:4px;padding:2px}
 body.s2 .v2{display:flex}
 body.s2 .mid,body.s2 .ch,body.s2>.b3{display:none}
 #mc{position:absolute;left:6px;top:40px;z-index:2;background:var(--card);border:1px solid var(--bd);border-radius:6px;opacity:.94;touch-action:none;cursor:crosshair}
@@ -115,9 +115,11 @@ body.wide .vt,body.wide #mc,body.wide #mw,body.wide .b3 button[data-k=trend]{dis
 .pt th.hl{color:var(--tx);background:color-mix(in srgb,var(--tx) 18%,var(--bg))}
 .pt td.hl,.pt tr.hl td{background:var(--tx);color:var(--bg);font-weight:700}
 #pres{font-size:12px;font-weight:600}
+#mdl{font-size:11px;color:var(--mu);line-height:1.4}
 /* streepjes op de verticale sliders (positie wordt in JS gezet) */
 .tk{position:absolute;left:1px;right:1px;height:2px;background:var(--tx);opacity:.85;pointer-events:none;z-index:2}
-#fiav{white-space:pre;text-align:center;line-height:1.1;font-size:9px}
+#fiav,#supplyv{white-space:pre;text-align:center;line-height:1.1}
+#fiav{font-size:9px}
 </style></head><body>
 <div class="tb"><span>Globe valve Forces Visualized</span><span>by BuulSoft '26</span></div>
 
@@ -141,12 +143,12 @@ body.wide .vt,body.wide #mc,body.wide #mw,body.wide .b3 button[data-k=trend]{dis
 </div>
 <div class="card" id="pc">
 <div class="sr p q"><div class="fr"><small>F[spring]</small><div class="dual" id="sT"><div class="th" id="sth"></div></div></div><div class="fr"><small>F[friction]</small><div class="dual" id="fT"><div class="th" id="fth"></div></div><input id="fric" type="hidden" value="1"></div><label class="f">MAST<input id="mast" type="number" step="0.1" value="65" title="Filled from the Info tables (base x material factor) when Size/Class/Stem material changes; can be edited"><span>[kN]</span></label><input id="spring" type="hidden" value="5"></div>
-<div class="sr p r2"><div class="fr"><small>Process [bar]</small><div class="dual" id="pT"><div class="seg"></div><div class="th" id="thin"></div><div class="th" id="thout"></div></div></div><label class="fc"><small>Max Operating</small><input id="pmaxop" type="number" value="100" step="0.1" inputmode="decimal"></label><label class="fc"><small>Max Shut Off</small><input id="pmax" type="number" value="135" step="0.1" inputmode="decimal"></label><input id="pin" type="hidden" value="75"><input id="pout" type="hidden" value="70"></div>
+<div class="sr p r2"><div class="fr"><small>Process [barg]</small><div class="dual" id="pT"><div class="seg"></div><div class="th" id="thin"></div><div class="th" id="thout"></div></div></div><label class="fc"><small>Max Operating</small><input id="pmaxop" type="number" value="100" step="0.1" inputmode="decimal"></label><label class="fc"><small>Max Shut Off</small><input id="pmax" type="number" value="135" step="0.1" inputmode="decimal"></label><input id="pin" type="hidden" value="75"><input id="pout" type="hidden" value="70"></div>
 <div class="btns"><button data-c="op" id="bop"></button><button data-c="maxin">Max in</button><button data-c="maxout">Max out</button><button data-c="z0">0 dP @0</button><button data-c="zm">0 dP @Max</button></div>
 </div>
 
 <div class="mid">
-<div class="card sk"><button class="ib" id="infob">Info</button><input id="flow" type="hidden" value="over"><input id="fail" type="hidden" value="close"><div class="pv"><span>100%</span><input id="pos" type="range" min="0" max="100" value="0" disabled title="Valve position (0% only for now)"><span>0%</span></div><div class="pv"><span id="supplyv"></span><input id="supplys" type="range" min="0" max="1000" step="1" value="452" title="Actuator air pressure (0-6 bar)"><input id="supply" type="hidden" value="4.2"><i class="tk" id="supplysk"></i><span>0</span></div><div class="pv"><span id="fiav"></span><input id="fias" type="range" min="150" max="400" step="25" value="250" title="F[IA]@ 4.2bar: 150-400%"><i class="tk" id="fiask"></i><span>150%</span></div><svg id="sketch" viewBox="0 0 200 264"></svg></div>
+<div class="card sk"><button class="ib" id="infob">Info</button><input id="flow" type="hidden" value="over"><input id="fail" type="hidden" value="close"><div class="pv"><span>100%</span><input id="pos" type="range" min="0" max="100" value="0" disabled title="Valve position (0% only for now)"><span>0%</span></div><div class="pv"><span id="supplyv"></span><input id="supplys" type="range" min="0" max="1000" step="1" value="452" title="Actuator air pressure (0-6 barg)"><input id="supply" type="hidden" value="4.2"><i class="tk" id="supplysk"></i><span>0</span></div><div class="pv"><span id="fiav"></span><input id="fias" type="range" min="150" max="400" step="25" value="250" title="F[IA] @ 4.2 barg: 150-400% of the spring force"><i class="tk" id="fiask"></i><span>150%</span></div><svg id="sketch" viewBox="0 0 200 264"></svg></div>
 <div class="cc">
 <div class="card"><i class="lb">Top view</i><svg id="top" viewBox="4 4 192 192"></svg></div>
 <div class="card"><i class="lb">Bottom view</i><svg id="bot" viewBox="4 4 192 192"></svg></div>
@@ -158,17 +160,19 @@ body.wide .vt,body.wide #mc,body.wide #mw,body.wide .b3 button[data-k=trend]{dis
 <div class="card v2"><div class="vt b3"><button data-k="trend"></button><button data-k="flow"></button><button data-k="fail"></button><button data-k="dir"></button></div><div id="tw"><canvas id="tc"></canvas><svg id="mw"></svg></div>
 <div class="tl"><span><i style="background:#2e9b57"></i>SF &gt; 150%</span><span><i style="background:#e6b800"></i>130-150%</span><span><i style="background:#f08a1c"></i>110-130%</span><span><i style="background:#d9382e"></i>100-110%</span><span><i style="background:#7a1010"></i>&lt; 100%</span><span><i style="background:#8e4fc2"></i>&gt; MAST</span></div></div>
 
-<div id="pop"><div class="box"><div class="hd"><span>Info</span><button id="popx">×</button></div><h4>Table 1 – base MAST [kN]</h4><div id="t1"></div><h4>Table 2 – relative MAST per stem material</h4><div id="t2"></div><h4>Table 3 – Max Trim Size [inch]</h4><div id="t3"></div><h4>Table 4 – Max Shut Off Pressure per ASME Class [barg]</h4><div id="t4"></div><div id="pres"></div></div></div>
+<div id="pop"><div class="box"><div class="hd"><span>Info</span><button id="popx">×</button></div><h4>Table 1 – base MAST [kN]</h4><div id="t1"></div><h4>Table 2 – relative MAST per stem material</h4><div id="t2"></div><h4>Table 3 – Max Trim Size [inch]</h4><div id="t3"></div><h4>Table 4 – Max Shut Off Pressure per ASME Class [barg]</h4><div id="t4"></div><div id="pres"></div><h4>Model (+ = opening, pressures in barg)</h4><div id="mdl">F<sub>hyd</sub> = P<sub>under</sub>·A<sub>stem</sub> + (P<sub>under</sub> − P<sub>over</sub>)·(A<sub>seat</sub> − A<sub>stem</sub>)<br>Stem circle: P<sub>under</sub> below, atmosphere above. Ring: P<sub>under</sub> below, P<sub>over</sub> above (negative in reverse flow).<br>Friction always opposes the movement.<br>F[IA] = F[spring] × F[IA]@4.2barg × IA/4.2 (air force ∝ gauge pressure).</div></div></div>
 
 <script>
 const $=id=>document.getElementById(id), N=id=>parseFloat($(id).value)||0;
 const NS='http://www.w3.org/2000/svg';
+const STEM_GAP=2; // minimale marge (% van plug) tussen stem- en seat-diameter: de stem blijft binnen de seat-cirkel
 function el(p,t,a,txt){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;p.appendChild(e);return e}
 
 function dia(){ // seat en stem = % van plug
+  if(N('stem')>N('seat')-STEM_GAP)$('stem').value=Math.max(5,N('seat')-STEM_GAP); // stem blijft binnen de seat-cirkel
   const p=pmm(),s=p*N('seat')/100,t=p*N('stem')/100;
-  // spring max = 2x worst case sluitkracht: Pmax·A_stem + (Pmax-Pout)·A_seat + friction (flow Under)
-  const need=(N('pmax')*Math.PI/4*t*t+Math.abs(N('pmax')-N('pout'))*Math.PI/4*s*s)*1e-4+N('fric');
+  // spring max = 2x worst case kracht op de plug: P[MaxShutOff]·A_seat (P onder = Pmax, P boven = 0) + friction; hangt dus niet af van de huidige P in/out
+  const need=N('pmax')*Math.PI/4*s*s*1e-4+N('fric');
   $('spring').max=Math.max(Math.ceil(2*need*10)/10,0.1);
   const smax=parseFloat($('spring').max);if(N('spring')>smax)$('spring').value=smax;
   const sw_=sfrozen||{c:N('spring'),m:smax};$('sth').style.left=gS(N('spring'),sw_)*100+'%';$('sth').textContent=N('spring').toFixed(1);
@@ -177,7 +181,7 @@ function dia(){ // seat en stem = % van plug
   const px=v=>`calc(22px + (100% - 44px)*${v})`; // duimcentrum 22px van de rand, balk loopt volledig
   const w=frozen||win();$('thin').style.left=px(g(pi,w));$('thout').style.left=px(g(po,w));$('thin').textContent=pi.toFixed(1);$('thout').textContent=po.toFixed(1);
   sg.style.left=px(g(lo,w));sg.style.width='calc((100% - 44px)*'+(g(hi,w)-g(lo,w))+')';
-  $('supplyv').textContent=N('supply').toFixed(1)+' bar';$('plugv').textContent=(N('plug')/8).toFixed(2)+'" '+Math.round(p)+' mm';$('seatv').textContent=N('seat').toFixed(1)+'% '+s.toFixed(1)+'mm';$('stemv').textContent=N('stem').toFixed(1)+'% '+t.toFixed(1)+'mm';
+  $('supplyv').textContent=N('supply').toFixed(1)+'\nbarg';$('plugv').textContent=(N('plug')/8).toFixed(2)+'" '+Math.round(p)+' mm';$('seatv').textContent=N('seat').toFixed(1)+'% '+s.toFixed(1)+'mm';$('stemv').textContent=N('stem').toFixed(1)+'% '+t.toFixed(1)+'mm';
   const un=$('flow').value==='under',pu=un?'var(--hi)':'var(--lo)',pu4=un?'var(--hi4)':'var(--lo4)',po4=un?'var(--lo4)':'var(--hi4)';
   const bar=(id,i,w,col)=>{const b=$(id+'T').children[i];b.style.width=w+'%';b.style.background=col};
   bar('stem',0,N('seat'),po4);bar('stem',1,N('stem'),'#000'); // top view
@@ -185,15 +189,22 @@ function dia(){ // seat en stem = % van plug
   const fw=ffrozen||{c:N('fric'),m:FM};$('fth').style.left=gS(N('fric'),fw)*100+'%';$('fth').textContent=N('fric').toFixed(1);
   return {p,s,t};
 }
+// Kracht van de procesdruk op plug+stem (+ = openen): enige bron voor calc() (waterval) en xy() (kleurvlak).
+// Onder de seat staat P_onder over de hele seat-cirkel (A_seat). Boven de plug staat P_boven op de ring (A_seat - A_stem);
+// de stemdoorsnede (A_stem) heeft boven de atmosfeer (0 barg). Dus F = P_onder·A_stem + (P_onder - P_boven)·(A_seat - A_stem),
+// met teken: negatief als P_boven > P_onder (reverse flow). 1 bar = 0,1 N/mm2, dus [kN] = bar·mm2·1e-4.
+function hyd(pin,pout,under,As,Ast){
+  const pU=under?pin:pout, pO=under?pout:pin, k=0.1/1000;
+  return {pU,pO,stem:pU*Ast*k,seat:(pU-pO)*Math.max(As-Ast,0)*k};
+}
 function calc(){
   const d=dia(),As=Math.PI/4*d.s**2, Ast=Math.PI/4*d.t**2;
   const pin=N('pin'), pout=N('pout'); // P[MaxShutOff] telt niet mee in de krachten
-  const under=$('flow').value==='under';
-  const pU=under?pin:pout, pO=under?pout:pin, dP=Math.abs(pin-pout), k=0.1/1000;
-  return {pU,pO,dP,under,F:{
+  const under=$('flow').value==='under', h=hyd(pin,pout,under,As,Ast);
+  return {pU:h.pU,pO:h.pO,dP:Math.abs(pin-pout),under,F:{
     spring:($('fail').value==='open'?1:-1)*N('spring'), // + = openen
-    stem:pU*Ast*k,
-    seat:(under?1:-1)*dP*As*k}};
+    stem:h.stem,
+    seat:h.seat}};
 }
 
 function arrow(s,x1,y1,x2,y2,col,sw=2.5,L=8,W=4){
@@ -202,7 +213,8 @@ function arrow(s,x1,y1,x2,y2,col,sw=2.5,L=8,W=4){
   el(s,'polygon',{points:`${x2},${y2} ${bx-W*Math.sin(a)},${by+W*Math.cos(a)} ${bx+W*Math.sin(a)},${by-W*Math.cos(a)}`,fill:col});
 }
 
-function fiaF(){return N('spring')*(N('fias')/100)*(N('supply')+1)/(4.2+1)} // F[IA]: veerkracht x F[IA] x (IA+1)/(4.2+1)
+// F[IA] = veerkracht x F[IA]@4.2barg x IA/4.2. Luchtkracht = overdruk (barg) x membraanoppervlak: de atmosfeer drukt aan beide kanten van het membraan, dus geen +1 (bara).
+function fiaF(){return N('spring')*(N('fias')/100)*N('supply')/4.2}
 function sketch(c){
   const s=$('sketch');s.innerHTML='';
   const pu=c.under?'var(--hi)':'var(--lo)', po=c.under?'var(--lo)':'var(--hi)', ln={stroke:'var(--tx)','stroke-width':1.6,fill:'none'};
@@ -237,7 +249,7 @@ function sketch(c){
   let sp='M100 '+y0;for(let i=1;i<=6;i++)sp+=' L'+(i%2?80:120)+' '+(y0+(y1-y0)*i/7);sp+=' L100 '+y1;
   el(s,'path',{d:sp,fill:'none',stroke:'var(--neg)','stroke-width':1.8});
   if(fo)el(s,'rect',{x:100-sw/2,y:44,width:sw,height:28,fill:'var(--mid)',stroke:'var(--tx)'});
-  // luchtkamer (zonder veer): F: 0 - spring x F[IA] x (IA+1)/(4.2+1); Fail Close = onderkamer, Fail Open = bovenkamer
+  // luchtkamer (zonder veer): F: 0 - spring x F[IA] x IA/4.2; Fail Close = onderkamer, Fail Open = bovenkamer
   const fmax=fiaF(),ft='F: 0 - '+fmax.toFixed(1)+' kN',fs2=Math.min(13,82/(ft.length*.6)),cy=fo?31.5:59;
   el(s,'text',{x:100,y:cy+fs2*.35,'text-anchor':'middle','font-size':fs2,'font-weight':700,fill:'var(--tx)',stroke:'var(--card)','stroke-width':3,'paint-order':'stroke'},ft);
   // veerkracht-pijl (+ = omhoog = open)
@@ -322,19 +334,19 @@ function chart(c){const s=$('chart');wf(s,c,s.clientWidth||380,s.clientHeight||2
 // streepjes: 4.2 bar op de supply-slider (niet-lineaire schaal) en 250% op de F[IA]-slider (lineair 150-400)
 function placeTicks(){[['supplys',1-Math.sqrt(1-4.2/6)],['fias',(250-150)/(400-150)]].forEach(([id,f])=>{
   const i=$(id),t=$(id+'k'),r=10;t.style.top=(i.offsetTop+r+(1-f)*(i.offsetHeight-2*r)-1)+'px'})}
-function update(){if(!preset)op={i:N('pin'),o:N('pout')};$('bop').textContent='Op '+Math.round(op.i)+'→'+Math.round(op.o);const c=calc();sketch(c);circles(c);chart(c);lbl();trend(c);$('fiav').textContent='F[IA]@\n4.2bar\n'+$('fias').value+'%';placeTicks()}
+function update(){if(!preset)op={i:N('pin'),o:N('pout')};$('bop').textContent='Op '+Math.round(op.i)+'→'+Math.round(op.o);const c=calc();sketch(c);circles(c);chart(c);lbl();trend(c);$('fiav').textContent='F[IA]@\n4.2barg\n'+$('fias').value+'%';placeTicks()}
 // plug-slider: 20 lineaire stappen, max = Max Trim Size van de gekozen valve size (Table 3); waarde intern in achtsten inch
 $('plugs').addEventListener('input',()=>setPlug());
 // actuator-luchtdruk 0-6 bar, verticaal en niet-lineair: fijnere stappen bij hoge druk
 $('supplys').addEventListener('input',()=>{$('supply').value=(Math.round(6*(1-(1-$('supplys').value/1000)**2)*10)/10).toFixed(1)});
 document.querySelectorAll('input,select').forEach(e=>e.addEventListener('input',update));
-function sym(id,min,max){ // symmetrische slider: balkbreedte = % van plug (track = plug)
+function sym(id,lim){ // symmetrische slider: balkbreedte = % van plug (track = plug); lim() geeft [min,max]
   const inp=$(id),t=$(id+'T');
-  const set=e=>{const r=t.getBoundingClientRect(),w=Math.abs(e.clientX-(r.left+r.width/2))*2/r.width*100;inp.value=Math.round(Math.min(max,Math.max(min,w))*10)/10;update()};
+  const set=e=>{const r=t.getBoundingClientRect(),w=Math.abs(e.clientX-(r.left+r.width/2))*2/r.width*100,[min,max]=lim();inp.value=Math.round(Math.min(max,Math.max(min,w))*10)/10;update()};
   t.addEventListener('pointerdown',e=>{t.setPointerCapture(e.pointerId);set(e)});
   t.addEventListener('pointermove',e=>{if(t.hasPointerCapture(e.pointerId))set(e)});
 }
-sym('stem',5,95);sym('seat',75,99);dual();
+sym('stem',()=>[5,Math.min(95,N('seat')-STEM_GAP)]);sym('seat',()=>[Math.max(75,N('stem')+STEM_GAP),99]);dual();
 function dual(){ // 1 slider met 2 handles: P in (rood) en P out (blauw), max = P max shut off
   const t=$('pT');let act=null;
   const val=e=>{const r=t.getBoundingClientRect(),w=frozen||win();return Math.round(Math.min(w.pm,Math.max(0,gi(Math.min(1,Math.max(0,(e.clientX-r.left-22)/(r.width-44))),w)))*10)/10};
@@ -375,14 +387,14 @@ function xy(cv,W,H,mini){ // P[in] (x) tegen P[out] (y); mini = kleine overlay o
   const dpr=window.devicePixelRatio||1;
   cv.width=W*dpr;cv.height=H*dpr;cv.style.width=W+'px';cv.style.height=H+'px';
   const g=cv.getContext('2d');g.setTransform(dpr,0,0,dpr,0,0);
-  const tx=getComputedStyle(document.body).color;
+  const tx=getComputedStyle(document.body).color,ink='#1b1f24'; // in het (altijd lichte) kleurvlak staat donkere inkt, ook in de donkere modus
   // groot: y-cijfers staan in de plot, dus de plot loopt (bijna) over de volle breedte; pc: rechthoekig, vult het hele vak
   const rect=!mini&&document.body.classList.contains('wide');
   const ml=mini?19:6,mb=mini?12:17,mt=mini?11:19,mr=mini?8:6,S=Math.max(30,Math.min(W-ml-mr,H-mt-mb)),SX=rect?W-ml-mr:S,SY=rect?H-mt-mb:S;
   const x0=ml+Math.max(0,(W-ml-mr-SX)/2),y0=mt+Math.max(0,(H-mt-mb-SY)/2),pm=Math.max(N('pmax'),1);
-  const p=pmm(),As=Math.PI/4*(p*N('seat')/100)**2,Ast=Math.PI/4*(p*N('stem')/100)**2,k=1e-4;
+  const p=pmm(),As=Math.PI/4*(p*N('seat')/100)**2,Ast=Math.PI/4*(p*N('stem')/100)**2;
   const un=$('flow').value==='under',sd=$('fail').value==='open'?1:-1,dir=flip?-sd:sd,sp=sd*N('spring'),fr=N('fric'),mast=N('mast');
-  const netF=(pin,pout)=>sp-dir*fr+(un?pin:pout)*Ast*k+(un?1:-1)*Math.abs(pin-pout)*As*k;
+  const netF=(pin,pout)=>{const h=hyd(pin,pout,un,As,Ast);return sp-dir*fr+h.stem+h.seat};
   // fijne resolutie: nx x ny pixels, geschaald zonder uitsmeren
   const nx=mini?60:Math.min(260,Math.max(60,Math.round(SX/1.5))),ny=mini?60:Math.min(260,Math.max(60,Math.round(SY/1.5))),off=document.createElement('canvas');off.width=nx;off.height=ny;
   const og=off.getContext('2d'),im=og.createImageData(nx,ny),d=im.data,C=[[140,200,163],[241,216,115],[247,191,130],[234,146,140],[196,160,228],[139,30,30]];
@@ -405,40 +417,51 @@ function xy(cv,W,H,mini){ // P[in] (x) tegen P[out] (y); mini = kleine overlay o
       const sp_=(mini?4:7)*dpr;hg.beginPath();for(let k=-hh;k<hw;k+=sp_){hg.moveTo(k,hh);hg.lineTo(k+hh,0)}hg.stroke();
       g.drawImage(hc,x0,y0,SX,SY)}}
   g.strokeStyle=tx;g.fillStyle=tx;g.lineWidth=mini?1:1.5;g.strokeRect(x0,y0,SX,SY);
-  g.setLineDash([5,4]);g.lineWidth=1;g.beginPath();g.moveTo(x0,y0+SY);g.lineTo(x0+SX,y0);g.stroke();g.setLineDash([]);
+  g.strokeStyle=ink;g.setLineDash([5,4]);g.lineWidth=1;g.beginPath();g.moveTo(x0,y0+SY);g.lineTo(x0+SX,y0);g.stroke();g.setLineDash([]);g.strokeStyle=tx;
   g.font=(mini?8:11)+'px system-ui,sans-serif';const dg=pm%1?1:0,ty=y0+SY+(mini?9:13);
   [0,1].forEach(f=>{g.textAlign=f?'right':'center';g.fillText((f*pm).toFixed(dg),x0+f*SX,ty)});
   if(mini)[0,1].forEach(f=>{g.textAlign='right';g.fillText((f*pm).toFixed(dg),x0-3,y0+SY-f*SY+3)});
-  else{g.textAlign='left';g.lineJoin='round';g.lineWidth=3;g.strokeStyle='#fff';
+  else{g.textAlign='left';g.lineJoin='round';g.lineWidth=3;g.strokeStyle='#fff';g.fillStyle=ink;
     [0,.5,1].forEach(f=>{const yy=f===1?y0+11:f===0?y0+SY-4:y0+SY/2+4,s=(f*pm).toFixed(dg);g.strokeText(s,x0+3,yy);g.fillText(s,x0+3,yy)});
-    g.strokeStyle=tx;g.lineWidth=1}
+    g.strokeStyle=tx;g.fillStyle=tx;g.lineWidth=1}
   // donkergroene verticale lijn bij Max Operating Pressure, met label op de x-as
-  let tcx=x0+SX/2;const mo=N('pmaxop'),ttl=mini?'P in':'P in [bar]';
+  let tcx=x0+SX/2;const mo=N('pmaxop'),ttl=mini?'P in':'P in [barg]';
   if(mo>0&&mo<=pm){
     const lx=x0+mo/pm*SX,lab='P[Max Oper]',dk=matchMedia('(prefers-color-scheme: dark)').matches&&document.documentElement.dataset.theme!=='light';
     g.save();g.strokeStyle='#0a6b2a';g.lineWidth=1;g.setLineDash([5,4]);g.beginPath();g.moveTo(lx,y0);g.lineTo(lx,y0+SY);g.stroke();
     g.fillStyle=dk?'#4cc97a':'#0a6b2a';g.font=(mini?7.5:11)+'px system-ui,sans-serif';g.textAlign='center';
-    const w2=g.measureText(lab).width,cx2=Math.min(x0+SX-w2/2,Math.max(x0+w2/2,lx));g.fillText(lab,cx2,ty);
+    const w2=g.measureText(lab).width,rw=g.measureText(pm.toFixed(dg)).width,cx2=Math.min(x0+SX-rw-4-w2/2,Math.max(x0+w2/2,lx));g.fillText(lab,cx2,ty); // blijft vrij van het eindcijfer rechts
     const w1=g.measureText(ttl).width; // titel 'P in' schuift opzij als hij het label raakt
     if(Math.abs(cx2-tcx)<(w1+w2)/2+6)tcx=cx2>=tcx?cx2-w2/2-6-w1/2:cx2+w2/2+6+w1/2;
     g.restore();
   }
   g.textAlign='center';g.fillText(ttl,tcx,ty);
-  g.textAlign='left';g.fillText(mini?'P out':'P out [bar]',2,mini?8:13);
+  g.textAlign='left';g.fillText(mini?'P out':'P out [barg]',2,mini?8:13);
   const px=x0+N('pin')/pm*SX,py=y0+SY-N('pout')/pm*SY;
-  g.setLineDash([3,3]);g.beginPath();g.moveTo(px,y0+SY);g.lineTo(px,py);g.lineTo(x0,py);g.stroke();g.setLineDash([]);
+  g.strokeStyle=ink;g.fillStyle=ink;g.setLineDash([3,3]);g.beginPath();g.moveTo(px,y0+SY);g.lineTo(px,py);g.lineTo(x0,py);g.stroke();g.setLineDash([]);
   g.beginPath();g.arc(px,py,mini?3.5:6,0,7);g.fill();g.strokeStyle='#fff';g.lineWidth=mini?1.2:2;g.stroke();
   const rx=x0+(mini?3:28);
-  g.font='bold '+(mini?7.5:13)+'px system-ui,sans-serif';g.fillStyle=tx;g.textAlign='left';g.fillText('Reverse Flow',rx,y0+(mini?9:18));g.textAlign='right';g.fillText('Normal Flow',x0+SX-(mini?3:7),y0+SY-(mini?4:8));
-  // Net Force-label: kiest een vrije plek (niet over overlay, 'Reverse/Normal Flow', y-cijfers of de rand)
+  // 'Reverse/Normal Flow': donkere inkt met witte rand, leesbaar op elk kleurvlak (ook op donkerrood)
+  g.font='bold '+(mini?7.5:13)+'px system-ui,sans-serif';g.lineJoin='round';g.lineWidth=mini?2.5:3.5;g.strokeStyle='#fff';g.fillStyle=ink;
+  [['Reverse Flow',rx,y0+(mini?9:18),'left'],['Normal Flow',x0+SX-(mini?3:7),y0+SY-(mini?4:8),'right']].forEach(([s,x,y,al])=>{g.textAlign=al;g.strokeText(s,x,y);g.fillText(s,x,y)});
+  // Net Force-label: kiest de plek met de kleinste overlap (met overlay, 'Reverse/Normal Flow', y-cijfers en de stip) en blijft altijd binnen het vlak
   const lab=avoid=>{if(mini)return;const txt='Net Force '+netF(N('pin'),N('pout')).toFixed(2)+' kN';
-    g.font='bold 17px system-ui,sans-serif';const w=g.measureText(txt).width;
-    const rs=[{x:rx,y:y0+5,w:96,h:16},{x:x0+SX-103,y:y0+SY-21,w:96,h:16},{x:x0,y:y0,w:26,h:SY}].concat(avoid||[]);
-    const cands=[[px+10,py-10,'left'],[px+10,py+24,'left'],[px-10,py-10,'right'],[px-10,py+24,'right']];let pick=cands[0];
-    for(const c of cands){const r={x:c[2]==='left'?c[0]:c[0]-w,y:c[1]-16,w:w,h:21};
-      const inside=r.x>=x0&&r.x+r.w<=x0+SX&&r.y>=y0&&r.y+r.h<=y0+SY,hit=rs.some(q=>r.x<q.x+q.w&&r.x+r.w>q.x&&r.y<q.y+q.h&&r.y+r.h>q.y);
-      if(inside&&!hit){pick=c;break}}
-    g.textAlign=pick[2];g.lineWidth=4;g.strokeStyle='#fff';g.lineJoin='round';g.strokeText(txt,pick[0],pick[1]);g.fillStyle=tx;g.fillText(txt,pick[0],pick[1])};
+    let fz=Math.max(9,Math.min(17,Math.round(SX/12)));g.font='bold '+fz+'px system-ui,sans-serif';let w=g.measureText(txt).width;
+    if(w>SX-8){fz=Math.max(7,Math.floor(fz*(SX-8)/w));g.font='bold '+fz+'px system-ui,sans-serif';w=g.measureText(txt).width} // nooit breder dan het vlak
+    const h=fz+4,yw=Math.ceil(pm.toFixed(dg).length*6.2)+6;
+    const rs=[{x:rx,y:y0+5,w:96,h:16},{x:x0+SX-103,y:y0+SY-21,w:96,h:16},{x:x0,y:y0,w:yw,h:14},{x:x0,y:y0+SY/2-8,w:yw,h:14},{x:x0,y:y0+SY-16,w:yw,h:14},{x:px-8,y:py-8,w:16,h:16}].concat(avoid||[]);
+    const ov=(a,b)=>Math.max(0,Math.min(a.x+a.w,b.x+b.w)-Math.max(a.x,b.x))*Math.max(0,Math.min(a.y+a.h,b.y+b.h)-Math.max(a.y,b.y));
+    const cands=[];[0,1].forEach(k=>{const dy=k*(h+2);cands.push([px+10,py-10-dy,0],[px+10,py+fz+7+dy,0],[px-10,py-10-dy,1],[px-10,py+fz+7+dy,1])}); // rechts/links van de stip, boven/onder; daarna een label-hoogte verder
+    const score=r=>rs.reduce((a,q)=>a+ov(r,q),0),dist=r=>Math.hypot(Math.max(r.x-px,0,px-r.x-r.w),Math.max(r.y-py,0,py-r.y-r.h));
+    let best=null,bs=Infinity;
+    for(const c of cands){const r={x:Math.min(Math.max(c[2]?c[0]-w:c[0],x0+2),x0+SX-w-2),y:Math.min(Math.max(c[1]-fz+1,y0+2),y0+SY-h-2),w:w,h:h};
+      const sc=score(r);if(sc<bs){bs=sc;best=r;if(!sc)break}}
+    if(bs>0){ // naast de stip is niets vrij: zoek in het hele vlak de vrije plek die het dichtst bij de stip ligt (anders de plek met de minste overlap)
+      let bd=dist(best);
+      for(let yy=y0+2;yy<=y0+SY-h-2;yy+=4)for(let xx=x0+2;xx<=x0+SX-w-2;xx+=4){
+        const r={x:xx,y:yy,w:w,h:h},sc=score(r);
+        if(sc<bs){bs=sc;bd=dist(r);best=r}else if(sc===bs){const d=dist(r);if(d<bd){bd=d;best=r}}}}
+    g.textAlign='left';g.lineWidth=4;g.strokeStyle='#fff';g.lineJoin='round';g.strokeText(txt,best.x,best.y+fz-1);g.fillStyle=ink;g.fillText(txt,best.x,best.y+fz-1)};
   return {x0,y0,S,SX,SY,pm,lab};
 }
 function trend(c){
@@ -446,7 +469,7 @@ function trend(c){
   if(document.body.classList.contains('s2')){const w=$('tw');TG=xy($('tc'),w.clientWidth,w.clientHeight,false);
     // waterfall-overlay op de xy-grafiek: linksboven, of rechtsonder als de stip daar zit
     const sm=$('mw'),kk=Math.min(1.25,(TG.S-46)/288),MW=170*kk,MH=118*kk,dx=TG.x0+N('pin')/TG.pm*TG.S,dy=TG.y0+TG.S-N('pout')/TG.pm*TG.S,ax=TG.x0+6,ay=TG.y0+24; // kk: past de overlay zo aan dat hij niet over de diagonaal gaat
-    const inA=dx>ax-12&&dx<ax+MW+12&&dy>ay-12&&dy<ay+MH+12;
+    const inA=dx>ax-12&&dx<ax+MW+12&&dy>ay-30&&dy<ay+MH+12; // ook als de stip net boven de overlay zit: dan heeft het Net Force-label daar ruimte nodig
     wf(sm,c,MW,MH,true);
     const lx=inA?TG.x0+TG.S-MW-6:ax,ly=inA?TG.y0+TG.S-MH-24:ay;
     sm.style.cssText=`width:${MW}px;height:${MH}px;left:${lx}px;top:${ly}px`;TG.lab([{x:lx,y:ly,w:MW,h:MH}])}
@@ -477,8 +500,8 @@ const MC=['150','300','600','900','1500','2500'];
 const MT=[['1','1"',[10,12,15,18,22,28]],['1.5','1\u00bd"',[15,18,22,26,32,40]],['2','2"',[20,25,30,35,45,55]],['3','3"',[30,35,45,55,70,90]],['4','4"',[40,50,65,80,100,125]],['6','6"',[60,80,100,120,150,190]],['8','8"',[90,120,150,185,230,300]],['10','10"',[120,160,210,260,330,420]],['12','12"',[160,220,280,350,450,550]],['16','16"',[240,320,420,520,650,850]],['20','20"',[350,470,600,780,950,1200]],['24','24"',[480,650,850,1050,1300,1650]],['30','30"',[700,950,1250,1550,1900,2400]]];
 const MF=[['316SS',1],['410SS',1.4],['Nitronic 50',1.7],['17-4PH H900',2.5]];
 const MX={'1':0.81,'1.5':1.25,'2':1.62,'3':2.62,'4':3.5,'6':5,'8':6.25,'10':8,'12':9.5,'16':12,'20':13.5,'24':15,'30':20};
-const MP={'150':20,'300':50,'600':100,'900':155,'1500':255,'2500':524};
-function setPressures(){const pm=MP[VS.cls],r=v=>Math.round(v*10)/10;$('pmax').value=pm;$('pin').value=r(pm/4);$('pout').value=r(pm/2);$('pmaxop').value=r(pm*.75);preset=false}
+const MP={'150':20,'300':50,'600':100,'900':155,'1500':255,'2500':425}; // ASME B16.34 Group 1.1 bij 38 °C, afgerond (2500: 6170 psig = 425 barg)
+function setPressures(){const pm=MP[VS.cls],r=v=>Math.round(v*10)/10;$('pmax').value=pm;$('pin').value=r(pm/2);$('pout').value=r(pm/4);$('pmaxop').value=r(pm*.75);preset=false}
 function setPlug(){$('plug').value=+(MX[VS.size]*8*N('plugs')/20).toFixed(4)}
 const VS={};
 function mastVal(){const r=MT.find(x=>x[0]===VS.size),ci=MC.indexOf(VS.cls),f=MF.find(x=>x[0]===VS.mat);return{r,ci,f,base:r[2][ci],mast:+(r[2][ci]*f[1]).toFixed(1)}}
