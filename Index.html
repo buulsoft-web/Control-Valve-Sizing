@@ -76,12 +76,13 @@ svg{width:100%;height:100%;min-height:0;display:block}
 .v2{display:none;flex:1;min-height:300px;flex-direction:column;gap:4px;padding:2px}
 body.s2 .v2{display:flex}
 body.s2 .mid,body.s2 .ch,body.s2>.b3{display:none}
-#mc{position:absolute;left:6px;top:40px;z-index:2;background:var(--card);border:1px solid var(--bd);border-radius:6px;opacity:.94;touch-action:none;cursor:crosshair}
+#mc{position:absolute;left:30px;top:40px;z-index:2;background:var(--card);border:1px solid var(--bd);border-radius:6px;opacity:.94;touch-action:none;cursor:crosshair}
 .vt button{font-size:15px;min-height:58px}
 #tw{flex:1;min-height:0;position:relative}
 #mw{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--bd);border-radius:6px;opacity:.95}
 #tc{display:block;touch-action:none;cursor:crosshair}
 .tl{display:flex;gap:10px;font-size:11px;color:var(--mu);justify-content:center;flex-wrap:wrap}
+.tl i.hat{background:repeating-linear-gradient(45deg,#2f6fd0 0 2px,#fff 2px 4px);border:1px solid #2f6fd0}
 .tl i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
 /* pc-indeling: invoer en waterfall links, klep + cirkels en xy-plot rechts; niet full width */
 body.wide{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:430px 1fr;grid-template-rows:auto auto auto auto auto 1fr;gap:6px;padding:8px;height:min(100vh,980px);border:1px solid var(--bd);border-radius:14px}
@@ -158,7 +159,7 @@ body.wide .vt,body.wide #mc,body.wide #mw,body.wide .b3 button[data-k=trend]{dis
 <div class="b3"><button data-k="trend"></button><button data-k="flow"></button><button data-k="fail"></button><button data-k="dir"></button></div>
 <div class="card ch"><svg id="chart"></svg><canvas id="mc"></canvas></div>
 <div class="card v2"><div class="vt b3"><button data-k="trend"></button><button data-k="flow"></button><button data-k="fail"></button><button data-k="dir"></button></div><div id="tw"><canvas id="tc"></canvas><svg id="mw"></svg></div>
-<div class="tl"><span><i style="background:#2e9b57"></i>SF &gt; 150%</span><span><i style="background:#e6b800"></i>130-150%</span><span><i style="background:#f08a1c"></i>110-130%</span><span><i style="background:#d9382e"></i>100-110%</span><span><i style="background:#7a1010"></i>&lt; 100%</span><span><i style="background:#8e4fc2"></i>&gt; MAST</span></div></div>
+<div class="tl"><span><i style="background:#2e9b57"></i>SF &gt; 150%</span><span><i style="background:#e6b800"></i>130-150%</span><span><i style="background:#f08a1c"></i>110-130%</span><span><i style="background:#d9382e"></i>100-110%</span><span><i style="background:#7a1010"></i>&lt; 100%</span><span><i style="background:#8e4fc2"></i>&gt; MAST</span><span><i class="hat"></i>Air shortfall (&lt; 150%)</span></div></div>
 
 <div id="pop"><div class="box"><div class="hd"><span>Info</span><button id="popx">×</button></div><h4>Table 1 – base MAST [kN]</h4><div id="t1"></div><h4>Table 2 – relative MAST per stem material</h4><div id="t2"></div><h4>Table 3 – Max Trim Size [inch]</h4><div id="t3"></div><h4>Table 4 – Max Shut Off Pressure per ASME Class [barg]</h4><div id="t4"></div><div id="pres"></div><h4>Model (+ = opening, pressures in barg)</h4><div id="mdl">F<sub>hyd</sub> = P<sub>under</sub>·A<sub>stem</sub> + (P<sub>under</sub> − P<sub>over</sub>)·(A<sub>seat</sub> − A<sub>stem</sub>)<br>Stem circle: P<sub>under</sub> below, atmosphere above. Ring: P<sub>under</sub> below, P<sub>over</sub> above (negative in reverse flow).<br>Friction always opposes the movement.<br>F[IA] = F[spring] × F[IA]@4.2barg × IA/4.2 (air force ∝ gauge pressure).</div></div></div>
 
@@ -305,28 +306,33 @@ function wf(s,c,W,H,mini){ // waterfall; mini = kleine overlay op de xy-grafiek 
   const lines=[[.5,'#2e9b57'],[.3,'#e6b800'],[.1,'#f08a1c'],[0,'var(--tx)']];
   const mast=N('mast'),over=mast>0&&Math.abs(cum)>mast,mastOn=mast>0&&Math.abs(cum)>=.7*mast; // MAST-lijn alleen als de net force in de buurt komt
   const nc=over?'#8e4fc2':sp&&sfv<0?'#7a1010':sfv>=.5?lines[0][1]:sfv>=.3?lines[1][1]:sfv>=.1?lines[2][1]:'#d9382e';
-  const lv=bars.flatMap(b=>[b.a,b.b]).concat(mastOn?[0,Math.sign(cum||1)*mast]:[0]),hi=Math.max(...lv),lo=Math.min(...lv),rng=(hi-lo)||1;
+  const aD=-sd,N0=Math.abs(cum); // aD: richting van de luchtkracht; N0: kracht die de lucht moet overwinnen
+  const lv=bars.flatMap(b=>[b.a,b.b]).concat(mastOn?[0,Math.sign(cum||1)*mast]:[0],N0>1e-9?[aD*.5*N0]:[]),hi=Math.max(...lv),lo=Math.min(...lv),rng=(hi-lo)||1;
   const top=mini?8:34,bot=H-(mini?11:20),y=v=>top+(hi-v)/rng*(bot-top);
-  const m=6,lp=(mini||document.body.classList.contains('wide'))?0:128,slot=(W-m-lp)/bars.length,bw=slot*0.82; // lp: vrije ruimte links voor de xy-overlay
+  const m=6,lp=0,gap=mini?4:12,slot=(W-m-lp-gap)/bars.length,bw=slot*0.82; // volle breedte; gap: kleine ruimte tussen Net en F[IA]
   if(!mini)el(s,'text',{x:m,y:14,'font-size':12,'font-weight':600,fill:'var(--tx)'},(dir>0?'Opening':'Closing')+(dir===sd?' (spring)':'')+' \u00b7 kN');
   if(!mini)el(s,'text',{x:162,y:16,'text-anchor':'start','font-size':14,'font-weight':700,fill:'var(--tx)'},'Safety Factor '+(f.spring?(Math.round(cum/f.spring*100)+100)+'%':'\u221e'));
   el(s,'line',{x1:m,x2:W-m,y1:y(0),y2:y(0),stroke:'var(--mu)'});
   const drawBar=(b,i)=>{
-    const x=lp+i*slot+(slot-bw)/2,yt=y(Math.max(b.a,b.b)),ht=Math.max(Math.abs(y(b.a)-y(b.b)),1);
-    if(b.ia){const lo_=Math.min(b.a,b.b),hi_=Math.max(b.a,b.b);
-      // onvoldoende lucht = Fail Close: onder nul, Fail Open: boven nul (gearceerd); andere kant effen blauw
-      const part=(ya,yb,hatch)=>{const t0=y(Math.max(ya,yb)),h0=Math.abs(y(ya)-y(yb));if(h0<=0)return;
-        el(s,'rect',hatch?{x,y:t0,width:bw,height:h0,fill:'url(#'+hid+')',stroke:'#4a90d9','stroke-width':1}:{x,y:t0,width:bw,height:h0,fill:'#4a90d9',opacity:.9})};
-      if(hi_>0)part(Math.max(lo_,0),hi_,sd>0);
-      if(lo_<0)part(lo_,Math.min(hi_,0),sd<0);
-    }else el(s,'rect',{x,y:yt,width:bw,height:ht,fill:b.net?nc:b.ia?'#4a90d9':i===2?(c.under?'var(--hi)':'var(--lo)'):i===3?'url(#'+gid+')':(b.v>=0?'var(--pos)':'var(--neg)'),opacity:b.net?.75:.9});
+    const x=lp+i*slot+(slot-bw)/2+(b.ia?gap:0),yt=y(Math.max(b.a,b.b)),ht=Math.max(Math.abs(y(b.a)-y(b.b)),1);
+    el(s,'rect',{x,y:yt,width:bw,height:ht,fill:b.net?nc:b.ia?'#4a90d9':i===2?(c.under?'var(--hi)':'var(--lo)'):i===3?'url(#'+gid+')':(b.v>=0?'var(--pos)':'var(--neg)'),opacity:b.net?.75:.9});
     if(Math.abs(b.v)>1e-9){const len=Math.abs(y(b.b)-y(b.a));arrow(s,x+bw/2,y(b.a),x+bw/2,y(b.b),'#000',1.2,Math.min(6,len*0.6),Math.min(3,len*0.3))}
     el(s,'text',b.net?{x:x+bw/2,y:yt-4,'text-anchor':'middle','font-size':fs+(mini?2:4),'font-weight':700,fill:'var(--tx)',stroke:'var(--card)','stroke-width':3,'paint-order':'stroke'}:{x:x+bw/2,y:yt-4,'text-anchor':'middle','font-size':fs,fill:'var(--tx)'},b.v.toFixed(2));
     el(s,'text',{x:x+bw/2,y:H-(mini?2:5),'text-anchor':'middle','font-size':fs,fill:'var(--mu)'},b.n);
     if(!b.ia)el(s,'line',{x1:x+bw,x2:x+slot,y1:y(b.b),y2:y(b.b),stroke:'var(--mu)','stroke-dasharray':'2 2'});
   };
+  // achtergrond achter de F[IA]-balk (de balk dekt hem af): SF_lucht = F[IA] / Net; donkerrood <100%, rood tot 110%, oranje tot 130%, geel tot 150%, daarboven groen
+  if(N0>1e-9){const ai=bars.findIndex(b=>b.ia),xb=lp+ai*slot+(slot-bw)/2+gap;
+    [[-1e9,0,'#7a1010'],[0,.1*N0,'#d9382e'],[.1*N0,.3*N0,'#f08a1c'],[.3*N0,.5*N0,'#e6b800'],[.5*N0,1e9,'#2e9b57']].forEach(([t0,t1,col])=>{
+      const v0=aD*t0,v1=aD*t1,a2=Math.max(Math.min(v0,v1),lo),b2=Math.min(Math.max(v0,v1),hi);
+      if(b2>a2)el(s,'rect',{x:xb,y:y(b2),width:bw,height:y(a2)-y(b2),fill:col,opacity:.5})})}
   bars.forEach((b,i)=>{if(!b.net)drawBar(b,i)});
   if(sp)lines.forEach(([p,col],k)=>{const yy=y(sp*p),pw=mini?22:36,ph=mini?10:14,x0=W-m-pw-(k%2?pw+3:0);el(s,'line',{x1:m,x2:W-m,y1:yy,y2:yy,stroke:col,'stroke-width':1.5,'stroke-dasharray':'5 3'});el(s,'rect',{x:x0,y:yy-ph/2,width:pw,height:ph,rx:3,fill:col});el(s,'text',{x:x0+pw/2,y:yy+(mini?2.7:4),'text-anchor':'middle','font-size':mini?7:11,'font-weight':700,fill:p===0?'var(--bg)':'#000'},(Math.round(p*100)+100)+'%')});
+  // F[IA]-grenslijnen 110/130/150% (gespiegeld boven de 100%-lijn): lijn = nul + p x Net, in de richting van de lucht; labels links
+  if(N0>1e-9)[[.1,'#f08a1c','110%'],[.3,'#e6b800','130%'],[.5,'#2e9b57','150%']].forEach(([p,col,tl])=>{const yy=y(aD*p*N0),pw=mini?18:28,ph=mini?9:13;
+    el(s,'line',{x1:m,x2:W-m,y1:yy,y2:yy,stroke:col,'stroke-width':mini?1:1.5,'stroke-dasharray':'5 3'});
+    el(s,'rect',{x:m,y:yy-ph/2,width:pw,height:ph,rx:3,fill:col});
+    el(s,'text',{x:m+pw/2,y:yy+(mini?2.5:3.7),'text-anchor':'middle','font-size':mini?6.5:10,'font-weight':700,fill:'#000'},tl)});
   if(mastOn){const yy=y(Math.sign(cum||1)*mast),pw=mini?26:44,ph=mini?10:14;el(s,'line',{x1:m,x2:W-m,y1:yy,y2:yy,stroke:'#8e4fc2','stroke-width':1.5,'stroke-dasharray':'2 3'});el(s,'rect',{x:lp+2,y:yy-ph/2,width:pw,height:ph,rx:3,fill:'#8e4fc2'});el(s,'text',{x:lp+2+pw/2,y:yy+(mini?2.7:4),'text-anchor':'middle','font-size':mini?7:11,'font-weight':700,fill:'#fff'},'MAST')}
   const ni=bars.findIndex(b=>b.net);drawBar(bars[ni],ni); // Net als laatste: staat voor de lijnen en de 100%-pill
 }
@@ -398,23 +404,27 @@ function xy(cv,W,H,mini){ // P[in] (x) tegen P[out] (y); mini = kleine overlay o
   // fijne resolutie: nx x ny pixels, geschaald zonder uitsmeren
   const nx=mini?60:Math.min(260,Math.max(60,Math.round(SX/1.5))),ny=mini?60:Math.min(260,Math.max(60,Math.round(SY/1.5))),off=document.createElement('canvas');off.width=nx;off.height=ny;
   const og=off.getContext('2d'),im=og.createImageData(nx,ny),d=im.data,C=[[140,200,163],[241,216,115],[247,191,130],[234,146,140],[196,160,228],[139,30,30]];
+  const nets=new Float32Array(nx*ny);
   for(let i=0;i<nx;i++)for(let j=0;j<ny;j++){
-    const net=netF((i+.5)/nx*pm,(j+.5)/ny*pm),sf=sp?net/sp:-1;
+    const net=netF((i+.5)/nx*pm,(j+.5)/ny*pm),sf=sp?net/sp:-1;nets[i*ny+j]=net;
     const c=(mast>0&&Math.abs(net)>mast)?C[4]:sp&&sf<0?C[5]:sf>=.5?C[0]:sf>=.3?C[1]:sf>=.1?C[2]:C[3],q=((ny-1-j)*nx+i)*4;
     d[q]=c[0];d[q+1]=c[1];d[q+2]=c[2];d[q+3]=255;
   }
   og.putImageData(im,0,0);g.imageSmoothingEnabled=false;g.drawImage(off,x0,y0,SX,SY);
-  // gebied waar lucht onvoldoende is (F[IA]-balk eindigt onder nul): wit/groen gearceerd
-  {const fia=fiaF(),mk=document.createElement('canvas');mk.width=nx;mk.height=ny;
-    const mg=mk.getContext('2d'),mi=mg.createImageData(nx,ny),md=mi.data;let any=false;
+  // luchtlaag: waar F[IA] te weinig is. SF_lucht = F[IA] / (Net in veerrichting): <100% donkerrood, 100-110% rood, 110-130% oranje, 130-150% geel (daarboven geen laag = groen); blauw gearceerd
+  {const fia=fiaF(),CA=[[139,30,30],[234,146,140],[247,191,130],[241,216,115]];
+    const ac=document.createElement('canvas'),mk=document.createElement('canvas');ac.width=mk.width=nx;ac.height=mk.height=ny;
+    const ag=ac.getContext('2d'),mg=mk.getContext('2d'),ai=ag.createImageData(nx,ny),mi=mg.createImageData(nx,ny),ad=ai.data,md=mi.data;let any=false;
     for(let i=0;i<nx;i++)for(let j=0;j<ny;j++){
-      if(sd*(netF((i+.5)/nx*pm,(j+.5)/ny*pm)-sd*fia)>0){md[((ny-1-j)*nx+i)*4+3]=255;any=true}}
-    if(any){mg.putImageData(mi,0,0);
-      const hw=Math.max(1,Math.round(SX*dpr)),hh=Math.max(1,Math.round(SY*dpr)),hc=document.createElement('canvas');hc.width=hw;hc.height=hh;
-      const hg=hc.getContext('2d');hg.imageSmoothingEnabled=false;hg.drawImage(mk,0,0,hw,hh);
-      hg.globalCompositeOperation='source-in';hg.fillStyle='#fff';hg.fillRect(0,0,hw,hh);
-      hg.globalCompositeOperation='source-atop';hg.strokeStyle='#2e9b57';hg.lineWidth=(mini?1.5:2.5)*dpr;
-      const sp_=(mini?4:7)*dpr;hg.beginPath();for(let k=-hh;k<hw;k+=sp_){hg.moveTo(k,hh);hg.lineTo(k+hh,0)}hg.stroke();
+      const net=nets[i*ny+j],need=sd*net;if(need<=0)continue; // net werkt al in de richting van de lucht: geen lucht nodig
+      const r=fia/need,z=r<1?0:r<1.1?1:r<1.3?2:r<1.5?3:-1;if(z<0)continue;
+      const q=((ny-1-j)*nx+i)*4;any=true;md[q+3]=255;
+      if(!(mast>0&&Math.abs(net)>mast)){const c=CA[z];ad[q]=c[0];ad[q+1]=c[1];ad[q+2]=c[2];ad[q+3]=255} // MAST-paars blijft zichtbaar, maar wel gearceerd
+    }
+    if(any){ag.putImageData(ai,0,0);g.drawImage(ac,x0,y0,SX,SY);mg.putImageData(mi,0,0);
+      const hw=Math.max(1,Math.round(SX*dpr)),hh=Math.max(1,Math.round(SY*dpr)),hc=document.createElement('canvas'),lc=document.createElement('canvas');hc.width=lc.width=hw;hc.height=lc.height=hh;
+      const lg2=lc.getContext('2d');lg2.strokeStyle='#2f6fd0';lg2.lineWidth=(mini?1.3:2)*dpr;const sp_=(mini?4:7)*dpr;lg2.beginPath();for(let k=-hh;k<hw;k+=sp_){lg2.moveTo(k,hh);lg2.lineTo(k+hh,0)}lg2.stroke();
+      const hg=hc.getContext('2d');hg.imageSmoothingEnabled=false;hg.drawImage(mk,0,0,hw,hh);hg.globalCompositeOperation='source-in';hg.drawImage(lc,0,0);
       g.drawImage(hc,x0,y0,SX,SY)}}
   g.strokeStyle=tx;g.fillStyle=tx;g.lineWidth=mini?1:1.5;g.strokeRect(x0,y0,SX,SY);
   g.strokeStyle=ink;g.setLineDash([5,4]);g.lineWidth=1;g.beginPath();g.moveTo(x0,y0+SY);g.lineTo(x0+SX,y0);g.stroke();g.setLineDash([]);g.strokeStyle=tx;
